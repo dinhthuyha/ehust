@@ -4,6 +4,7 @@ import java.sql.Time
 import javax.persistence.*
 
 @Entity
+@Table(name = "subject")
 data class Subject (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -21,6 +22,6 @@ data class Subject (
     @Column(name = "date_study")
     val dateStudy:String,
 
-    @OneToOne(mappedBy = "subject")
+    @OneToOne(mappedBy = "codeClass")
     val user: User,
         )

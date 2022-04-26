@@ -3,6 +3,7 @@ package com.hadt.ehust.entities
 import javax.persistence.*
 
 @Entity
+@Table(name = "comments")
 data class Comments(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

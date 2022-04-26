@@ -5,6 +5,7 @@ import javax.persistence.*
 import javax.persistence.CascadeType;
 
 @Entity
+@Table(name = "task")
 data class Task(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -12,7 +13,7 @@ data class Task(
 
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "id_user_post")
-    val idUserPost:User,
+    val userIdPost:User,
 
     val description:String,
     @Column(name = "estimate_time")
@@ -24,6 +25,6 @@ data class Task(
     @Column(name = "due_date")
     val dueDate:Date,
 
-    @OneToOne(mappedBy = "task")
+    @OneToOne(mappedBy = "idTask")
     val comments: Comments
 )

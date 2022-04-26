@@ -4,14 +4,15 @@ import java.util.*
 import javax.persistence.*
 
 @Entity
-data class User (
+@Table(name = "user")
+data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id:Int,
+    val id: Int,
     @Column(name = "full_name")
-    val fullName:String,
+    val fullName: String,
     @Column(name = "íntitute_of_management")
-    val íntituteOfManagement:String,
+    val íntituteOfManagement: String,
     val gender: String,
     val grade: String,
     val course: Int,
@@ -19,17 +20,23 @@ data class User (
     @OneToOne(cascade = [CascadeType.ALL])
     @JoinColumn(name = "code_class")
     val codeClass: Subject,
-    val address:String,
+    val address: String,
     @Column(name = "image_background")
-    val imageBackground:String,
+    val imageBackground: String,
     @Column(name = "image_avata")
-    val imageAvata:String,
+    val imageAvata: String,
     val birthday: Date,
     val email: String,
-    val roleId:String,
+    val roleId: String,
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "userIdPost")
     val task: Task,
-    val comments: Comments
+    @OneToOne(mappedBy = "idUser")
+    val comments: Comments,
+    @OneToOne(mappedBy = "idStudent")
+    val pairingStudent: PairingTeacherWithStudent,
+    @OneToOne(mappedBy = "idTeacher")
+    val pairingTeacher: PairingTeacherWithStudent,
 
-)
+
+    )
