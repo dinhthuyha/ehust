@@ -17,5 +17,8 @@ class UserController(
     fun getAllArticles(): List<User> =
         userService.findAll()
 
+    @GetMapping("user/{id}")
+    fun getUserById(@PathVariable(value = "id") id: Int)= userService.getUserById(id)
+
 
 }
