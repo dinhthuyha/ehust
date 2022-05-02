@@ -21,7 +21,13 @@ data class Subject (
     val finishTime: Time,
     @Column(name = "date_study")
     val dateStudy:String,
+    @Column(name = "study_form")
+    val studyForm: String,
 
-    @OneToOne(mappedBy = "codeClass")
-    val user: User,
-        )
+    @ManyToMany(mappedBy = "likedSubjects")
+    val likes: Set<User>,
+
+
+    @OneToMany(mappedBy = "subject")
+    val tasks: Set<Task>
+)

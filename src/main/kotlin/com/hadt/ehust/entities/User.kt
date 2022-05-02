@@ -17,9 +17,7 @@ data class User(
     val grade: String,
     val course: Int,
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "code_class")
-    val codeClass: Subject,
+
     val address: String,
     @Column(name = "image_background")
     val imageBackground: String,
@@ -28,11 +26,18 @@ data class User(
     val birthday: Date,
     val email: String,
     val roleId: String,
+    @Column(name = "cadre_status")
+    val cadreStatus: String,
+    @Column(name = "unit")
+    val unit:String,
 
-    @OneToOne(mappedBy = "userIdPost")
-    val task: Task,
-    @OneToOne(mappedBy = "idUser")
-    val comments: Comments,
+    @ManyToMany
+    @JoinTable(name = "user_subject", joinColumns = [JoinColumn(name = "user_id")], inverseJoinColumns = [JoinColumn(name = "subject_id")] )
+    val likedSubjects: Set<Subject>,
+
+     @OneToMany(mappedBy = "user")
+     val comments: Set<Comments>,
+
     @OneToOne(mappedBy = "idStudent")
     val pairingStudent: PairingTeacherWithStudent,
     @OneToOne(mappedBy = "idTeacher")

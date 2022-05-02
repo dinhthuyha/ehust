@@ -9,22 +9,31 @@ import javax.persistence.CascadeType;
 data class Task(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id_task")
     val id: Int,
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "id_user_post")
-    val userIdPost:User,
+    @Column(name = "id_user_post")
+    val userIdPost: Int,
 
     val description:String,
+
     @Column(name = "estimate_time")
     val estimateTime:Int,
+
     @Column(name = "spend_time")
     val spendTime: Int,
+
     @Column(name = "start_date")
     val startDate:Date,
+
     @Column(name = "due_date")
     val dueDate:Date,
 
-    @OneToOne(mappedBy = "idTask")
-    val comments: Comments
+    @ManyToOne
+    @JoinColumn(name = "code_class")
+    val subject: Subject,
+
+    @OneToMany(mappedBy = "task")
+    val commentsTask: Set<Comments>
+
 )

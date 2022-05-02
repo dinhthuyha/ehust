@@ -8,12 +8,12 @@ data class Comments(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
+    @ManyToOne
+    @JoinColumn(name ="id_task" )
+    val task:Task,
 
-    @OneToOne(cascade = [CascadeType.ALL])
-    @JoinColumn(name = "id_task")
-    val idTask: Task,
-
-    @OneToOne(cascade = [CascadeType.ALL])
+    @ManyToOne
     @JoinColumn(name = "id_user")
-    val idUser: User
+    val user: User,
+    val content: String
 )

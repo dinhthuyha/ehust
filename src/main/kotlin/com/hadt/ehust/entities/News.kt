@@ -9,5 +9,7 @@ data class News(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
     val title: String,
-    val content: String
+    val content: String,
+    @Column(name = "date_post")
+    val datePost: String
 )
