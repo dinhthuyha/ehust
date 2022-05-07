@@ -20,5 +20,6 @@ class UserController(
     @GetMapping("user/{id}")
     fun getUserById(@PathVariable(value = "id") id: Int)= userService.getUserById(id)
 
-
+    @GetMapping("user/profile/{id}")
+    fun getProfileById(@PathVariable(value = "id") id: Int)= userService.getProfileById(id)
 }

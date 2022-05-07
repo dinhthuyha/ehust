@@ -30,6 +30,12 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
+    fun getProfileById(id: Int): ResponseEntity<User> {
+        return userRepository.findById(id).map { article ->
+            ResponseEntity.ok(article)
+        }.orElse(ResponseEntity.notFound().build())
+    }
+
     fun findAll(): List<User> {
         return userRepository.findAll()
     }
