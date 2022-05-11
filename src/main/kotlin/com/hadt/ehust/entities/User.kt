@@ -17,7 +17,7 @@ data class User(
     val instituteOfManagement: String,
     val gender: String,
     val grade: String,
-    val course: Int,
+    val course: String,
 
 
     val address: String,
@@ -27,7 +27,7 @@ data class User(
     val imageAvata: String,
     val birthday: Date,
     val email: String,
-    val roleId: String,
+    val roleId: Int,
     @Column(name = "cadre_status")
     val cadreStatus: String,
     @Column(name = "unit")
