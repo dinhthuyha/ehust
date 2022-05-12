@@ -1,5 +1,6 @@
 package com.hadt.ehust.entities
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import javax.persistence.*
 
 @Entity
@@ -12,5 +13,6 @@ data class News(
     @Column(columnDefinition = "TEXT")
     val content: String,
     @Column(name = "date_post")
+    @JsonProperty("date_post")
     val datePost: String
 )

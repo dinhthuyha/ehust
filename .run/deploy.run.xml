@@ -15,7 +15,7 @@
       <env name="SSH_KEY_PEM" value="~/Downloads/ha_public_key.pem" />
     </envs>
     <method v="2">
-      <option name="Gradle.BeforeRunTask" enabled="true" tasks="assemble" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
+      <option name="Gradle.BeforeRunTask" enabled="false" tasks="assemble" externalProjectPath="$PROJECT_DIR$" vmOptions="" scriptParameters="" />
     </method>
   </configuration>
 </component>

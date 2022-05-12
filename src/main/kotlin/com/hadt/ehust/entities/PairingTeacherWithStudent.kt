@@ -12,6 +12,8 @@ data class PairingTeacherWithStudent(
     val idStudent : User,
 
     @OneToOne(cascade=[CascadeType.ALL])
-@JoinColumn(name = "id_teacher")
-val idTeacher : User
+    @JoinColumn(name = "id_teacher")
+    val idTeacher : User
+
+    //todo: can co id_class
 )
