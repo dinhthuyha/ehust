@@ -1,12 +1,18 @@
 package com.hadt.ehust.entities
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import java.sql.Time
 import javax.persistence.*
 
 @Entity
 @Table(name = "class")
-data class ClassStudent (
+@JsonIdentityInfo(
+    generator = ObjectIdGenerators.PropertyGenerator::class,
+    property = "code_class"
+)
+class ClassStudent (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "code_class")
