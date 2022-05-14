@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 class NewsService(
     private val newsRepository: NewsRepository
 ) {
-    fun getAllNews()= newsRepository.findAll()
+    fun findAllNews()= newsRepository.findAll()
 
 
 }

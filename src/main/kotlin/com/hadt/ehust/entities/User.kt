@@ -1,5 +1,6 @@
 package com.hadt.ehust.entities
 
+import com.fasterxml.jackson.annotation.JsonProperty
 import java.util.*
 import javax.persistence.*
 
@@ -10,10 +11,13 @@ data class User(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
     @Column(name = "password")
+    @JsonProperty("password")
     val passWord: String,
     @Column(name = "full_name")
+    @JsonProperty("full_name")
     val fullName: String,
-    @Column(name = "íntitute_of_management")
+    @Column(name = "institute_of_management")
+    @JsonProperty("institute_of_management")
     val instituteOfManagement: String,
     val gender: String,
     val grade: String,
@@ -22,20 +26,23 @@ data class User(
 
     val address: String,
     @Column(name = "image_background")
+    @JsonProperty("image_background")
     val imageBackground: String,
-    @Column(name = "image_avata")
-    val imageAvata: String,
+    @Column(name = "image_avatar")
+    @JsonProperty("image_avatar")
+    val imageAvatar: String,
     val birthday: Date,
     val email: String,
     val roleId: Int,
     @Column(name = "cadre_status")
+    @JsonProperty("cadre_status")
     val cadreStatus: String,
     @Column(name = "unit")
     val unit:String,
 
     @ManyToMany
     @JoinTable(name = "user_class", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_class")] )
-    val likedClasses: Set<Class>,
+    val likedClasses: Set<ClassStudent>,
 
     @ManyToMany
     @JoinTable(name = "user_task", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_task")] )
