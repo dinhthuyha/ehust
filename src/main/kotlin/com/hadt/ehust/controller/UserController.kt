@@ -15,7 +15,6 @@ class UserController(
         return userService.signIn(20173086, "123456");
     }
 
-
     @GetMapping("/users")
     fun getAllArticles(): List<User> =
         userService.findAll()
