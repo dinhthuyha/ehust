@@ -1,5 +1,6 @@
 package com.hadt.ehust.service
 
+import com.hadt.ehust.entities.ClassStudent
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.exception.CustomException
 import com.hadt.ehust.repository.UserRepository
@@ -18,26 +19,45 @@ class UserService(
     fun signIn(id: Int, password: String): String {
         try {
             // authenticationManager.authenticate(UsernamePasswordAuthenticationToken(id, password))
-            return jwtTokenProvider.createToken(id, getUserById(id))
+            return jwtTokenProvider.createToken(id, findUserById(id))
         } catch (e: Exception) {
             throw CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
         }
     }
 
-    fun getUserById(id: Int): ResponseEntity<User> {
+    fun findUserById(id: Int): ResponseEntity<User> {
+        return userRepository.findById(id).map { article ->
+            ResponseEntity.ok(article)
+        }.orElse(ResponseEntity.notFound().build())
+    }
+    fun findUserByFullName(fullName: String): ResponseEntity<User>{
+        return userRepository.findUserByFullName(fullName).map { user ->
+            ResponseEntity.ok(user)
+        }.orElse(ResponseEntity.notFound().build())
+    }
+
+    fun findProfileById(id: Int): ResponseEntity<User> {
         return userRepository.findById(id).map { article ->
             ResponseEntity.ok(article)
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun getProfileById(id: Int): ResponseEntity<User> {
-        return userRepository.findById(id).map { article ->
-            ResponseEntity.ok(article)
+    fun findALlStudentInClass(grade: String): ResponseEntity<List<User?>>? {
+        return userRepository.getListStudentInClass(grade).map { users ->
+            ResponseEntity.ok(users)
+        }.orElse(ResponseEntity.notFound().build())
+    }
+    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ClassStudent>>{
+        return userRepository.findById(id).map { user ->
+            val projects = user.likedClasses.toList().filter { it.isProjectSubject==true }
+            ResponseEntity.ok(projects)
         }.orElse(ResponseEntity.notFound().build())
     }
 
     fun findAll(): List<User> {
         return userRepository.findAll()
     }
+
+
 
 }
