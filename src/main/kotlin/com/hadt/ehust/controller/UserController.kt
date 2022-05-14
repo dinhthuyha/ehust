@@ -20,22 +20,22 @@ class UserController(
         userService.findAll()
 
     //TODO; get profile
-    @GetMapping("user/profile/{id}")
+    @GetMapping("/user/profile/{id}")
     fun findProfileById(@PathVariable(value = "id") id: Int)= userService.findProfileById(id)
 
     //TODO: lay danh sach lop sinh vien
-    @GetMapping("classstudent/{grade}")
+    @GetMapping("/classstudent/{grade}")
     fun findListStudentInClass(@PathVariable(value = "grade") grade: String) = userService.findALlStudentInClass(grade)
 
     //TODO: Lay danh sach cac project da lam
-    @GetMapping("user/projects/{id}/")
+    @GetMapping("/user/projects/{id}")
     fun findAllProjectsByStudentId(@PathVariable(value = "id") id: Int) = userService.findAllProjectsByIdStudent(id)
 
     //TODO tim kiem sinh vien theo fullname
-    @GetMapping("search/user/{fullName}")
+    @GetMapping("/search/user/name/{fullName}")
     fun findUserByFullName(@PathVariable(value = "full_name") fullName: String) = userService.findUserByFullName(fullName)
 
-    @GetMapping("search/user/{id}")
+    @GetMapping("/search/user/id/{id}")
     fun findUserById(@PathVariable(value = "id") id: Int) = userService.findUserById(id)
 
 
