@@ -1,6 +1,7 @@
 package com.hadt.ehust.security
 
 import com.hadt.ehust.entities.User
+import com.hadt.ehust.response.UserResponse
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import org.springframework.beans.factory.annotation.Value
@@ -23,10 +24,12 @@ class JwtTokenProvider {
     }
 
 
-    fun createToken(id: Int , user: ResponseEntity<User>):String {
-        val claims = Jwts.claims().setSubject(id.toString())
+    fun createToken(id: Int , user: ResponseEntity<UserResponse>):String {
+        val claims = Jwts.claims()
+        claims["id"] = user.body?.id
         claims["role_id"] = user.body?.roleId
         claims["full_name"] = user.body?.fullName
+        claims["grade"] = user.body?.grade
         val now = Date()
         val validity = Date(now.time + validityInMilliseconds)
         return Jwts.builder()

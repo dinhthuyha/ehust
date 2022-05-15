@@ -24,6 +24,8 @@ class ClassStudent (
     @Column(name = "name_course")
 
     val nameCourse:String,
+    @Column(name = "name_teacher")
+    val nameTeacher:String,
     @Column(name = "is_project_subject")
 
     var isProjectSubject: Boolean,
