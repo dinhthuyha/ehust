@@ -4,6 +4,7 @@ import com.hadt.ehust.entities.ClassStudent
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.exception.CustomException
 import com.hadt.ehust.repository.UserRepository
+import com.hadt.ehust.response.ProfileResponse
 import com.hadt.ehust.security.JwtTokenProvider
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -36,9 +37,9 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findProfileById(id: Int): ResponseEntity<User> {
+    fun findProfileById(id: Int): ResponseEntity<ProfileResponse> {
         return userRepository.findById(id).map { article ->
-            ResponseEntity.ok(article)
+            ResponseEntity.ok(ProfileResponse(article.id, article.fullName))
         }.orElse(ResponseEntity.notFound().build())
     }
 

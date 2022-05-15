@@ -12,7 +12,7 @@ class UserController(
 
     @PostMapping("/signin")
     fun login(@RequestParam(name = "id") id: Int, @RequestParam(name = "password") password: String): String {
-        return userService.signIn(20173086, "123456");
+        return userService.signIn(id, password);
     }
 
     @GetMapping("/users")
@@ -33,7 +33,7 @@ class UserController(
 
     //TODO tim kiem sinh vien theo fullname
     @GetMapping("/search/user/name/{fullName}")
-    fun findUserByFullName(@PathVariable(value = "full_name") fullName: String) = userService.findUserByFullName(fullName)
+    fun findUserByFullName(@PathVariable(value = "fullName") fullName: String) = userService.findUserByFullName(fullName)
 
     @GetMapping("/search/user/id/{id}")
     fun findUserById(@PathVariable(value = "id") id: Int) = userService.findUserById(id)
