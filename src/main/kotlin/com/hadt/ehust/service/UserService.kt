@@ -1,10 +1,10 @@
 package com.hadt.ehust.service
 
-import com.hadt.ehust.entities.ClassStudent
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.exception.CustomException
 import com.hadt.ehust.repository.UserRepository
-import com.hadt.ehust.response.ProfileResponse
+import com.hadt.ehust.response.ProjectResponse
+import com.hadt.ehust.response.UserResponse
 import com.hadt.ehust.security.JwtTokenProvider
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -26,39 +26,116 @@ class UserService(
         }
     }
 
-    fun findUserById(id: Int): ResponseEntity<User> {
-        return userRepository.findById(id).map { article ->
-            ResponseEntity.ok(article)
-        }.orElse(ResponseEntity.notFound().build())
-    }
-    fun findUserByFullName(fullName: String): ResponseEntity<User>{
-        return userRepository.findUserByFullName(fullName).map { user ->
-            ResponseEntity.ok(user)
+    fun findUserById(id: Int): ResponseEntity<UserResponse> {
+        return userRepository.findById(id).map {
+            ResponseEntity.ok(
+                UserResponse(
+                    id = it.id,
+                    fullName = it.fullName,
+                    instituteOfManagement = it.instituteOfManagement,
+                    gender = it.gender,
+                    grade = it.grade,
+                    course = it.course,
+                    email = it.email,
+                    cadreStatus = it.cadreStatus ?: "",
+                    unit = it.unit,
+                    roleId = it.roleId,
+                    imageAvatar = it.imageAvatar,
+                    imageBackground = it.imageBackground
+                )
+            )
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findProfileById(id: Int): ResponseEntity<ProfileResponse> {
-        return userRepository.findById(id).map { article ->
-            ResponseEntity.ok(ProfileResponse(article.id, article.fullName))
+    fun findUserByFullName(fullName: String): ResponseEntity<UserResponse> {
+        return userRepository.findUserByFullName(fullName).map {
+            ResponseEntity.ok(
+                UserResponse(
+                    id = it.id,
+                    fullName = it.fullName,
+                    instituteOfManagement = it.instituteOfManagement,
+                    gender = it.gender,
+                    grade = it.grade,
+                    course = it.course,
+                    email = it.email,
+                    cadreStatus = it.cadreStatus ?: "",
+                    unit = it.unit,
+                    roleId = it.roleId,
+                    imageAvatar = it.imageAvatar,
+                    imageBackground = it.imageBackground
+                )
+            )
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findALlStudentInClass(grade: String): ResponseEntity<List<User?>>? {
+    fun findProfileById(id: Int): ResponseEntity<UserResponse> {
+        return userRepository.findById(id).map {
+            ResponseEntity.ok(
+                UserResponse(
+                    id = it.id,
+                    fullName = it.fullName,
+                    instituteOfManagement = it.instituteOfManagement,
+                    gender = it.gender,
+                    grade = it.grade,
+                    course = it.course,
+                    email = it.email,
+                    cadreStatus = it.cadreStatus ?: "",
+                    unit = it.unit,
+                    roleId = it.roleId,
+                    imageAvatar = it.imageAvatar,
+                    imageBackground = it.imageBackground
+                )
+            )
+        }.orElse(ResponseEntity.notFound().build())
+    }
+
+    fun findALlStudentInClass(grade: String): ResponseEntity<List<UserResponse>> {
+        val listUser = mutableListOf<UserResponse>()
         return userRepository.getListStudentInClass(grade).map { users ->
-            ResponseEntity.ok(users)
+            users.forEach {
+                listUser.add(
+                    UserResponse(
+                        id = it.id,
+                        fullName = it.fullName,
+                        instituteOfManagement = it.instituteOfManagement,
+                        gender = it.gender,
+                        grade = it.grade,
+                        course = it.course,
+                        email = it.email,
+                        cadreStatus = it.cadreStatus ?: "",
+                        unit = it.unit,
+                        roleId = it.roleId,
+                        imageAvatar = it.imageAvatar,
+                        imageBackground = it.imageBackground
+                    )
+                )
+            }
+            ResponseEntity.ok(listUser.toList())
         }.orElse(ResponseEntity.notFound().build())
     }
-    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ClassStudent>>{
+
+    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ProjectResponse>> {
+        val projects = mutableListOf<ProjectResponse>()
         return userRepository.findById(id).map { user ->
-            val projects = user.likedClasses.toList()
-            ResponseEntity.ok(projects)
+            user.likedClasses.toList().forEach {
+                if (it.isProjectSubject) {
+                    val item = ProjectResponse(
+                        codeClass = it.codeClass,
+                        codeCourse = it.codeCourse,
+                        nameCourse = it.nameCourse,
+                        semester = it.semester,
+                        nameTeacher = it.nameTeacher ?: ""
+                    )
+                    projects.add(item)
+                }
+            }
+            ResponseEntity.ok(projects.toList())
         }.orElse(ResponseEntity.notFound().build())
     }
 
     fun findAll(): List<User> {
         return userRepository.findAll()
     }
-
 
 
 }
