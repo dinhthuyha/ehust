@@ -49,7 +49,7 @@ class UserService(
     }
     fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ClassStudent>>{
         return userRepository.findById(id).map { user ->
-            val projects = user.likedClasses.toList().filter { it.isProjectSubject==true }
+            val projects = user.likedClasses.toList()
             ResponseEntity.ok(projects)
         }.orElse(ResponseEntity.notFound().build())
     }
