@@ -8,18 +8,20 @@ import com.hadt.ehust.response.UserResponse
 import com.hadt.ehust.security.JwtTokenProvider
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 
 import org.springframework.stereotype.Service
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
-
+    private val authenticationManager: AuthenticationManager,
     private val jwtTokenProvider: JwtTokenProvider
 ) {
     fun signIn(id: Int, password: String): String {
         try {
-            // authenticationManager.authenticate(UsernamePasswordAuthenticationToken(id, password))
+            val authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(id, password))
             return jwtTokenProvider.createToken(id, findUserById(id))
         } catch (e: Exception) {
             throw CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
