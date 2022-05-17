@@ -30,6 +30,15 @@ class JwtTokenProvider {
         claims["role_id"] = user.body?.roleId
         claims["full_name"] = user.body?.fullName
         claims["grade"] = user.body?.grade
+        claims["institute_of_management"] = user.body?.instituteOfManagement
+        claims["gender"] = user.body?.gender
+        claims["course"] = user.body?.course
+        claims["email"] = user.body?.email
+        claims["cadre_status"] = user.body?.cadreStatus
+        claims["unit"] = user.body?.unit
+        claims["image_background"] = user.body?.imageBackground
+        claims["image_avatar"] = user.body?.imageAvatar
+
         val now = Date()
         val validity = Date(now.time + validityInMilliseconds)
         return Jwts.builder()
