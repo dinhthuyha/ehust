@@ -11,9 +11,9 @@ class UserController(
 ) {
 
     @PostMapping("/signin")
-    fun login(@RequestParam(name = "id") id: Int, @RequestParam(name = "password") password: String): String {
-        return userService.signIn(id, password);
-    }
+    fun login(@RequestParam(name = "id") id: Int, @RequestParam(name = "password") password: String) = userService.signIn(id, password)
+
+
 
     @GetMapping("/users")
     fun getAllArticles(): List<User> =

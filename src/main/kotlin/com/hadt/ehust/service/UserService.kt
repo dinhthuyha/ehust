@@ -17,12 +17,14 @@ class UserService(
 
     private val jwtTokenProvider: JwtTokenProvider
 ) {
-    fun signIn(id: Int, password: String): String {
+    fun signIn(id: Int, password: String): ResponseEntity<String> {
         try {
             // authenticationManager.authenticate(UsernamePasswordAuthenticationToken(id, password))
-            return jwtTokenProvider.createToken(id, findUserById(id))
+            if (findUserById(id).body == null)
+                return ResponseEntity.notFound().build()
+            return ResponseEntity.ok(jwtTokenProvider.createToken(id, findUserById(id)))
         } catch (e: Exception) {
-            throw CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+           return ResponseEntity.notFound().build()
         }
     }
 
