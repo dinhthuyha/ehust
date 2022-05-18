@@ -1,22 +1,26 @@
 package com.hadt.ehust.security
 
-import com.hadt.ehust.entities.User
 import com.hadt.ehust.response.UserResponse
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
+import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Component
+import org.springframework.stereotype.Service
+import java.security.Key
 import java.util.*
 import javax.annotation.PostConstruct
 
-@Component
-class JwtTokenProvider {
+@Service
+class JwtUtils {
     @Value("\${security.jwt.token.secret-key:secret-key}")
     private var secretKey: String? = null
 
     @Value("\${security.jwt.token.expire-length:3600000}")
     private var validityInMilliseconds: Long = 3600000 //1h
+    
+    private val keyPair = Keys.keyPairFor(SignatureAlgorithm.ES256)
 
     @PostConstruct
     protected fun init() {
@@ -48,5 +52,16 @@ class JwtTokenProvider {
             .setIssuedAt(now)
             .signWith(SignatureAlgorithm.HS256, secretKey)
             .compact()
+    }
+
+    fun generateAuthToken(user: UserDetailsImpl): String {
+        return Jwts.builder()
+            .setSubject(user.username)
+            .signWith(keyPair.private)
+            .compact()
+    }
+
+    fun validateAuthToken(jwt: String?) {
+        // TODO: verify JWT
     }
 }

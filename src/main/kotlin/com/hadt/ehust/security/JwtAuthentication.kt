@@ -17,10 +17,12 @@ import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 
 @Component
-class JwtAuthenticationTokenProvider: AuthenticationProvider {
+class JwtAuthenticationTokenProvider(
+    private val jwtUtils: JwtUtils
+): AuthenticationProvider {
     override fun authenticate(authentication: Authentication?): Authentication {
         authentication as JwtAuthenticationToken
-        // TODO: verify JWT
+        jwtUtils.validateAuthToken(authentication.jwtString)
         return JwtAuthenticationToken(authentication.credentials as Jws<Claims>, mutableListOf(SimpleGrantedAuthority("ROLE_ADMIN")))
     }
 
@@ -30,17 +32,16 @@ class JwtAuthenticationTokenProvider: AuthenticationProvider {
 }
 
 class JwtAuthenticationToken : AbstractAuthenticationToken {
-    private var jwtString: String? = null
+    var jwtString: String? = null
     private var jwt: Jws<Claims>? = null
 
-    constructor(token: String): super(null) {
-        this.jwtString = token
+    constructor(jwtString: String): super(null) {
+        this.jwtString = jwtString
         isAuthenticated = false
     }
 
-
-    constructor(token: Jws<Claims>, authorities: MutableCollection<out GrantedAuthority>?) : super(authorities) {
-        this.jwt = token
+    constructor(jwt: Jws<Claims>, authorities: MutableCollection<out GrantedAuthority>?) : super(authorities) {
+        this.jwt = jwt
         isAuthenticated = true
     }
 

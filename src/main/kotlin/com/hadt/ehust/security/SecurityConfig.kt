@@ -32,7 +32,7 @@ class SecurityConfig(
     }
 
     override fun configure(auth: AuthenticationManagerBuilder?) {
-        auth?.userDetailsService(userDetailsService)?.passwordEncoder(passwordEncoder())
+        auth?.userDetailsService(userDetailsService)
         auth?.authenticationProvider(jwtAuthenticationTokenProvider)
     }
 
