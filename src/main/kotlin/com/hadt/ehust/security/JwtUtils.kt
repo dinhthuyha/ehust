@@ -1,6 +1,8 @@
 package com.hadt.ehust.security
 
 import com.hadt.ehust.response.UserResponse
+import io.jsonwebtoken.Claims
+import io.jsonwebtoken.Jws
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
@@ -19,7 +21,7 @@ class JwtUtils {
 
     @Value("\${security.jwt.token.expire-length:3600000}")
     private var validityInMilliseconds: Long = 3600000 //1h
-    
+
     private val keyPair = Keys.keyPairFor(SignatureAlgorithm.ES256)
 
     @PostConstruct
@@ -61,7 +63,10 @@ class JwtUtils {
             .compact()
     }
 
-    fun validateAuthToken(jwt: String?) {
-        // TODO: verify JWT
+    fun validateAuthToken(jwt: String?): Jws<Claims> {
+        return Jwts.parserBuilder()
+            .setSigningKey(keyPair.public)
+            .build()
+            .parseClaimsJws(jwt)
     }
 }

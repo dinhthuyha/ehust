@@ -30,7 +30,7 @@ class UserDetailsImpl(
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
         //TODO: get roles from user entity
-        return mutableListOf(SimpleGrantedAuthority("ROLE_ADMIN"))
+        return mutableListOf(SimpleGrantedAuthority("ROLE_STUDENT"))
     }
 
     override fun getPassword(): String {

@@ -2,14 +2,15 @@ package com.hadt.ehust.security
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.AbstractAuthenticationToken
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.AuthenticationProvider
 import org.springframework.security.core.Authentication
 import org.springframework.security.core.GrantedAuthority
-import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.stereotype.Component
 import org.springframework.web.filter.OncePerRequestFilter
 import javax.servlet.FilterChain
@@ -18,12 +19,14 @@ import javax.servlet.http.HttpServletResponse
 
 @Component
 class JwtAuthenticationTokenProvider(
-    private val jwtUtils: JwtUtils
+    private val jwtUtils: JwtUtils,
+    @Qualifier("myImpl") private val userDetailsService: UserDetailsService
 ): AuthenticationProvider {
     override fun authenticate(authentication: Authentication?): Authentication {
         authentication as JwtAuthenticationToken
-        jwtUtils.validateAuthToken(authentication.jwtString)
-        return JwtAuthenticationToken(authentication.credentials as Jws<Claims>, mutableListOf(SimpleGrantedAuthority("ROLE_ADMIN")))
+        val jwt = jwtUtils.validateAuthToken(authentication.jwtString)
+        val user = userDetailsService.loadUserByUsername(jwt.body.subject)
+        return JwtAuthenticationToken(jwt, user.authorities)
     }
 
     override fun supports(authentication: Class<*>?): Boolean {
