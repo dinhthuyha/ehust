@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.hadt.ehust.model.Role
 import java.util.*
 import javax.persistence.*
 
@@ -38,7 +39,11 @@ class User(
     val imageAvatar: String,
     val birthday: Date,
     val email: String,
-    val roleId: Int,
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "role_id")
+    val role: Role,
+
     @Column(name = "cadre_status")
     val cadreStatus: String,
     @Column(name = "unit")

@@ -1,17 +1,14 @@
 package com.hadt.ehust.service
 
 import com.hadt.ehust.entities.User
-import com.hadt.ehust.exception.CustomException
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.response.ProjectResponse
 import com.hadt.ehust.response.UserResponse
 import com.hadt.ehust.security.JwtUtils
 import com.hadt.ehust.security.UserDetailsImpl
-import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
-
 import org.springframework.stereotype.Service
 
 @Service
@@ -38,7 +35,7 @@ class UserService(
                     email = it.email,
                     cadreStatus = it.cadreStatus ?: "",
                     unit = it.unit,
-                    roleId = it.roleId,
+                    roleId = it.role.ordinal,
                     imageAvatar = it.imageAvatar,
                     imageBackground = it.imageBackground
                 )
@@ -59,7 +56,7 @@ class UserService(
                     email = it.email,
                     cadreStatus = it.cadreStatus ?: "",
                     unit = it.unit,
-                    roleId = it.roleId,
+                    roleId = it.role.ordinal,
                     imageAvatar = it.imageAvatar,
                     imageBackground = it.imageBackground
                 )
@@ -80,7 +77,7 @@ class UserService(
                     email = it.email,
                     cadreStatus = it.cadreStatus ?: "",
                     unit = it.unit,
-                    roleId = it.roleId,
+                    roleId = it.role.ordinal,
                     imageAvatar = it.imageAvatar,
                     imageBackground = it.imageBackground
                 )
@@ -103,7 +100,7 @@ class UserService(
                         email = it.email,
                         cadreStatus = it.cadreStatus ?: "",
                         unit = it.unit,
-                        roleId = it.roleId,
+                        roleId = it.role.ordinal,
                         imageAvatar = it.imageAvatar,
                         imageBackground = it.imageBackground
                     )
