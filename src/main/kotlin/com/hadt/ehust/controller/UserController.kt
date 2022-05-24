@@ -11,7 +11,7 @@ class UserController(
 ) {
 
     @PostMapping("/signin")
-    fun login(@RequestParam(name = "id") id: Int, @RequestParam(name = "password") password: String): String {
+    fun login(@RequestParam(name = "id") id: Int, @RequestParam(name = "password") password: String): Map<String,Any> {
         return userService.signIn(id, password);
     }
 

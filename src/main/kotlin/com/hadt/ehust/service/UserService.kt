@@ -17,7 +17,7 @@ class UserService(
     private val authenticationManager: AuthenticationManager,
     private val jwtUtils: JwtUtils
 ) {
-    fun signIn(id: Int, password: String): String {
+    fun signIn(id: Int, password: String): Map<String,Any> {
         val authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(id, password))
         return jwtUtils.generateAuthToken(authentication.principal as UserDetailsImpl)
     }

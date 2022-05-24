@@ -25,7 +25,7 @@ class UserDetailsServiceImpl(
 }
 
 class UserDetailsImpl(
-    private val user: User
+     val user: User
 ): UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
