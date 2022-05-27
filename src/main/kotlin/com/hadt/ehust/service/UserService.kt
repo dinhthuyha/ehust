@@ -146,7 +146,9 @@ class UserService(
                         it.startTime,
                         it.finishTime,
                         it.dateStudy,
-                        it.dateFinishCourse
+                        it.dateFinishCourse,
+                        it.dateStartCourse,
+                        it.nameCourse
                     )
                 )
             }

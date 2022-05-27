@@ -10,5 +10,7 @@ data class ScheduleModel(
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     val finishTime: LocalTime,
     val dateStudy : String,
-    val dueDateStudy: LocalDate
+    val dueDateStudy: LocalDate,
+    val startDateStudy: LocalDate,
+    val courseName: String
 )

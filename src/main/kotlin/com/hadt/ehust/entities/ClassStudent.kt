@@ -50,6 +50,9 @@ class ClassStudent (
     @Column(name = "date_finish_course")
     val dateFinishCourse: LocalDate,
 
+    @Column(name = "date_start_course")
+    val dateStartCourse: LocalDate,
+
     @Column(name = "study_form")
     val studyForm: String,
 
