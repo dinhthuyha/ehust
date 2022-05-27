@@ -4,7 +4,10 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import org.springframework.format.annotation.DateTimeFormat
 import java.sql.Time
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.persistence.*
 
 @Entity
@@ -21,28 +24,34 @@ class ClassStudent (
 
     @Column(name = "code_course")
     val codeCourse: String,
-    @Column(name = "name_course")
 
+    @Column(name = "name_course")
     val nameCourse:String,
+
     @Column(name = "name_teacher")
     val nameTeacher:String,
+
     @Column(name = "is_project_subject")
-
     var isProjectSubject: Boolean,
+
     val semester: Int,
+
     @Column(name = "start_time")
+    @DateTimeFormat(pattern = "HH:mm")
+    val startTime: LocalTime,
 
-    val startTime: Time,
     @Column(name = "finish_time")
+    @DateTimeFormat(pattern = "HH:mm")
+    val finishTime: LocalTime,
 
-    val finishTime: Time,
     @Column(name = "date_study")
-
     val dateStudy:String,
+
+    @Column(name = "date_finish_course")
+    val dateFinishCourse: LocalDate,
+
     @Column(name = "study_form")
-
     val studyForm: String,
-
 
     @ManyToMany(mappedBy = "likedClasses")
     @JsonIgnore

@@ -3,6 +3,7 @@ package com.hadt.ehust.service
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.response.ProjectResponse
+import com.hadt.ehust.response.ScheduleModel
 import com.hadt.ehust.response.UserResponse
 import com.hadt.ehust.security.JwtUtils
 import com.hadt.ehust.security.UserDetailsImpl
@@ -134,5 +135,22 @@ class UserService(
         return userRepository.findAll()
     }
 
-
+    fun findByScheduleByIdStudent(id: Int): ResponseEntity<List<ScheduleModel>>{
+        val classStudents = mutableListOf<ScheduleModel>()
+       return userRepository.findById(id).map {user ->
+            val likedClasses =  user.likedClasses.toList()
+            val semesterCurrent= likedClasses.maxOf { it.semester }
+            likedClasses.filter { !it.isProjectSubject && it.semester == semesterCurrent }.forEach {
+                classStudents.add(
+                    ScheduleModel(
+                        it.startTime,
+                        it.finishTime,
+                        it.dateStudy,
+                        it.dateFinishCourse
+                    )
+                )
+            }
+           ResponseEntity.ok(classStudents.toList())
+        }.orElse(ResponseEntity.notFound().build())
+    }
 }

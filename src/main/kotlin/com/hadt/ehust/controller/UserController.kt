@@ -38,7 +38,8 @@ class UserController(
     @GetMapping("/search/user/id/{id}")
     fun findUserById(@PathVariable(value = "id") id: Int) = userService.findUserById(id)
 
-
+    @GetMapping("/user/{id}/schedule")
+    fun findByScheduleByIdStudent(@PathVariable(value = "id") id: Int) = userService.findByScheduleByIdStudent(id)
 
 
 }
