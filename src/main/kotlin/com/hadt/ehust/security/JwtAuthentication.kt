@@ -2,6 +2,7 @@ package com.hadt.ehust.security
 
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jws
+import org.apache.logging.log4j.LogManager
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.HttpHeaders
 import org.springframework.security.authentication.AbstractAuthenticationToken
@@ -61,16 +62,24 @@ class JwtAuthenticationToken : AbstractAuthenticationToken {
 class JwtAuthenticationTokenFilter(
     private val authenticationManager: AuthenticationManager
 ): OncePerRequestFilter() {
+    private val log = LogManager.getLogger(JwtAuthenticationTokenFilter::class.java)
+
     override fun doFilterInternal(
         request: HttpServletRequest,
         response: HttpServletResponse,
         filterChain: FilterChain
     ) {
         val jwtString = parseJwt(request)
-        jwtString?.let {
-            val authenticationToken = JwtAuthenticationToken(it)
-            val authenticatedToken = authenticationManager.authenticate(authenticationToken)
-            SecurityContextHolder.getContext().authentication = authenticatedToken
+        jwtString?.let { jwt ->
+            val authenticationToken = JwtAuthenticationToken(jwt)
+            authenticationManager
+                .runCatching { authenticate(authenticationToken) }
+                .getOrElse {
+                    log.info("authentication failed: {}", it.message)
+                    null
+                }
+                ?.let { authenticatedToken -> SecurityContextHolder.getContext().authentication = authenticatedToken }
+
         }
         filterChain.doFilter(request, response)
     }
