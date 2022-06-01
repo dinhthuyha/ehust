@@ -23,10 +23,10 @@ class UserService(
         return jwtUtils.generateAuthToken(authentication.principal as UserDetailsImpl)
     }
 
-    fun findUserById(id: Int): ResponseEntity<UserResponse> {
+    fun findUserById(id: Int): ResponseEntity<User> {
         return userRepository.findById(id).map {
             ResponseEntity.ok(
-                UserResponse(
+                User(
                     id = it.id,
                     fullName = it.fullName,
                     instituteOfManagement = it.instituteOfManagement,
@@ -36,7 +36,7 @@ class UserService(
                     email = it.email,
                     cadreStatus = it.cadreStatus ?: "",
                     unit = it.unit,
-                    roleId = it.role.ordinal,
+                    role = it.role,
                     imageAvatar = it.imageAvatar,
                     imageBackground = it.imageBackground
                 )
@@ -44,10 +44,10 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findUserByFullName(fullName: String): ResponseEntity<UserResponse> {
+    fun findUserByFullName(fullName: String): ResponseEntity<User> {
         return userRepository.findUserByFullName(fullName).map {
             ResponseEntity.ok(
-                UserResponse(
+                User(
                     id = it.id,
                     fullName = it.fullName,
                     instituteOfManagement = it.instituteOfManagement,
@@ -57,7 +57,7 @@ class UserService(
                     email = it.email,
                     cadreStatus = it.cadreStatus ?: "",
                     unit = it.unit,
-                    roleId = it.role.ordinal,
+                    role = it.role,
                     imageAvatar = it.imageAvatar,
                     imageBackground = it.imageBackground
                 )
@@ -86,12 +86,12 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findALlStudentInClass(grade: String): ResponseEntity<List<UserResponse>> {
-        val listUser = mutableListOf<UserResponse>()
+    fun findALlStudentInClass(grade: String): ResponseEntity<List<User>> {
+        val listUser = mutableListOf<User>()
         return userRepository.getListStudentInClass(grade).map { users ->
             users.forEach {
                 listUser.add(
-                    UserResponse(
+                    User(
                         id = it.id,
                         fullName = it.fullName,
                         instituteOfManagement = it.instituteOfManagement,
@@ -101,7 +101,7 @@ class UserService(
                         email = it.email,
                         cadreStatus = it.cadreStatus ?: "",
                         unit = it.unit,
-                        roleId = it.role.ordinal,
+                        role = it.role,
                         imageAvatar = it.imageAvatar,
                         imageBackground = it.imageBackground
                     )

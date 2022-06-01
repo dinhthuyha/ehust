@@ -41,8 +41,8 @@ class JwtUtils {
         hashMap["gender"] = user.gender
         hashMap["course"] = user.course
         hashMap["email"] = user.email
-        hashMap["cadre_status"] = user.cadreStatus
-        hashMap["unit"] = user.unit
+        hashMap["cadre_status"] = user.cadreStatus.toString()
+        hashMap["unit"] = user.unit.toString()
         hashMap["image_background"] = user.imageBackground
         hashMap["image_avatar"] = user.imageAvatar
         return hashMap

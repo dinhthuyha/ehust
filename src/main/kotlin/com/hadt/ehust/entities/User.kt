@@ -2,6 +2,7 @@ package com.hadt.ehust.entities
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
@@ -16,6 +17,7 @@ import javax.persistence.*
     property = "id"
 )
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -32,12 +34,10 @@ class User(
     val course: String,
 
 
-    val address: String?=null,
     @Column(name = "image_background")
     val imageBackground: String,
     @Column(name = "image_avatar")
     val imageAvatar: String,
-    val birthday: Date?=null,
     val email: String,
 
     @Enumerated(EnumType.ORDINAL)
@@ -45,9 +45,9 @@ class User(
     val role: Role,
 
     @Column(name = "cadre_status")
-    val cadreStatus: String,
+    val cadreStatus: String?,
     @Column(name = "unit")
-    val unit:String,
+    val unit:String?,
 
     @ManyToMany
     @JoinTable(name = "user_class", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_class")] )
