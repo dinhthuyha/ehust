@@ -145,6 +145,7 @@ class UserService(
                         startTime = it.startTime,
                         finishTime = it.finishTime,
                         dateStudy = it.dateStudy,
+                        semester = it.semester,
                         dateFinishCourse = it.dateFinishCourse,
                         dateStartCourse = it.dateStartCourse,
                         nameCourse = it.nameCourse

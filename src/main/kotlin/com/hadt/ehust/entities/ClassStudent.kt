@@ -13,7 +13,7 @@ import javax.persistence.*
 @Table(name = "class")
 @JsonIdentityInfo(
     generator = ObjectIdGenerators.PropertyGenerator::class,
-    property = "codeClass"
+    property = "code_class"
 )
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
