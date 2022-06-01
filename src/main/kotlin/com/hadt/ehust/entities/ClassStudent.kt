@@ -1,9 +1,8 @@
 package com.hadt.ehust.entities
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import org.springframework.format.annotation.DateTimeFormat
 import java.sql.Time
 import java.time.LocalDate
@@ -16,6 +15,8 @@ import javax.persistence.*
     generator = ObjectIdGenerators.PropertyGenerator::class,
     property = "codeClass"
 )
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class ClassStudent (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -23,44 +24,44 @@ class ClassStudent (
     val codeClass: Int,
 
     @Column(name = "code_course")
-    val codeCourse: String,
+    val codeCourse: String? = null,
 
     @Column(name = "name_course")
-    val nameCourse:String,
+    val nameCourse:String? = null,
 
     @Column(name = "name_teacher")
-    val nameTeacher:String,
+    val nameTeacher:String? = null,
 
     @Column(name = "is_project_subject")
-    var isProjectSubject: Boolean,
+    var isProjectSubject: Boolean? = null,
 
-    val semester: Int,
+    val semester: Int? = null,
 
     @Column(name = "start_time")
-    @DateTimeFormat(pattern = "HH:mm")
-    val startTime: LocalTime,
+   @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+    val startTime: LocalTime? = null,
 
     @Column(name = "finish_time")
-    @DateTimeFormat(pattern = "HH:mm")
-    val finishTime: LocalTime,
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
+    val finishTime: LocalTime? = null,
 
     @Column(name = "date_study")
-    val dateStudy:String,
+    val dateStudy:String? = null,
 
     @Column(name = "date_finish_course")
-    val dateFinishCourse: LocalDate,
+    val dateFinishCourse: LocalDate? = null,
 
     @Column(name = "date_start_course")
-    val dateStartCourse: LocalDate,
+    val dateStartCourse: LocalDate? = null,
 
     @Column(name = "study_form")
-    val studyForm: String,
+    val studyForm: String? = null,
 
     @ManyToMany(mappedBy = "likedClasses")
     @JsonIgnore
-    val likes: Set<User>,
+    val likes: Set<User>? = null,
 
 
     @OneToMany(mappedBy = "mClass")
-    val tasks: Set<Task>
+    val tasks: Set<Task>? = null
 )

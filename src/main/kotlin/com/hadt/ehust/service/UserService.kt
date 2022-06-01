@@ -1,10 +1,8 @@
 package com.hadt.ehust.service
 
+import com.hadt.ehust.entities.ClassStudent
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.repository.UserRepository
-import com.hadt.ehust.response.ProjectResponse
-import com.hadt.ehust.response.ScheduleModel
-import com.hadt.ehust.response.UserResponse
 import com.hadt.ehust.security.JwtUtils
 import com.hadt.ehust.security.UserDetailsImpl
 import org.springframework.http.ResponseEntity
@@ -111,12 +109,12 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ProjectResponse>> {
-        val projects = mutableListOf<ProjectResponse>()
+    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ClassStudent>> {
+        val projects = mutableListOf<ClassStudent>()
         return userRepository.findById(id).map { user ->
             user.likedClasses?.toList()?.forEach {
-                if (it.isProjectSubject) {
-                    val item = ProjectResponse(
+                if (it.isProjectSubject==true) {
+                    val item = ClassStudent(
                         codeClass = it.codeClass,
                         codeCourse = it.codeCourse,
                         nameCourse = it.nameCourse,
@@ -135,20 +133,21 @@ class UserService(
         return userRepository.findAll()
     }
 
-    fun findByScheduleByIdStudent(id: Int): ResponseEntity<List<ScheduleModel>>{
-        val classStudents = mutableListOf<ScheduleModel>()
+    fun findByScheduleByIdStudent(id: Int): ResponseEntity<List<ClassStudent>>{
+        val classStudents = mutableListOf<ClassStudent>()
        return userRepository.findById(id).map {user ->
             val likedClasses =  user.likedClasses?.toList()
-            val semesterCurrent= likedClasses?.maxOf { it.semester }
-            likedClasses?.filter { !it.isProjectSubject && it.semester == semesterCurrent }?.forEach {
+            val semesterCurrent= likedClasses?.maxOf { it.semester!! }
+            likedClasses?.filter { !it.isProjectSubject!! && it.semester == semesterCurrent }?.forEach {
                 classStudents.add(
-                    ScheduleModel(
-                        it.startTime,
-                        it.finishTime,
-                        it.dateStudy,
-                        it.dateFinishCourse,
-                        it.dateStartCourse,
-                        it.nameCourse
+                    ClassStudent(
+                        codeClass =it.codeClass,
+                        startTime = it.startTime,
+                        finishTime = it.finishTime,
+                        dateStudy = it.dateStudy,
+                        dateFinishCourse = it.dateFinishCourse,
+                        dateStartCourse = it.dateStartCourse,
+                        nameCourse = it.nameCourse
                     )
                 )
             }
