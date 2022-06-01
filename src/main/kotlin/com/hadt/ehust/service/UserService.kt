@@ -65,10 +65,10 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findProfileById(id: Int): ResponseEntity<UserResponse> {
+    fun findProfileById(id: Int): ResponseEntity<User> {
         return userRepository.findById(id).map {
             ResponseEntity.ok(
-                UserResponse(
+                User(
                     id = it.id,
                     fullName = it.fullName,
                     instituteOfManagement = it.instituteOfManagement,
@@ -78,7 +78,7 @@ class UserService(
                     email = it.email,
                     cadreStatus = it.cadreStatus ?: "",
                     unit = it.unit,
-                    roleId = it.role.ordinal,
+                    role = it.role,
                     imageAvatar = it.imageAvatar,
                     imageBackground = it.imageBackground
                 )
@@ -114,7 +114,7 @@ class UserService(
     fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ProjectResponse>> {
         val projects = mutableListOf<ProjectResponse>()
         return userRepository.findById(id).map { user ->
-            user.likedClasses.toList().forEach {
+            user.likedClasses?.toList()?.forEach {
                 if (it.isProjectSubject) {
                     val item = ProjectResponse(
                         codeClass = it.codeClass,
@@ -138,9 +138,9 @@ class UserService(
     fun findByScheduleByIdStudent(id: Int): ResponseEntity<List<ScheduleModel>>{
         val classStudents = mutableListOf<ScheduleModel>()
        return userRepository.findById(id).map {user ->
-            val likedClasses =  user.likedClasses.toList()
-            val semesterCurrent= likedClasses.maxOf { it.semester }
-            likedClasses.filter { !it.isProjectSubject && it.semester == semesterCurrent }.forEach {
+            val likedClasses =  user.likedClasses?.toList()
+            val semesterCurrent= likedClasses?.maxOf { it.semester }
+            likedClasses?.filter { !it.isProjectSubject && it.semester == semesterCurrent }?.forEach {
                 classStudents.add(
                     ScheduleModel(
                         it.startTime,

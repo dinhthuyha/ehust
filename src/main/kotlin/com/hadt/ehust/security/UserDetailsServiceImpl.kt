@@ -33,7 +33,7 @@ class UserDetailsImpl(
     }
 
     override fun getPassword(): String {
-        return user.password
+        return user.password.toString()
     }
 
     override fun getUsername(): String {

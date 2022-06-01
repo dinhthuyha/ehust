@@ -22,7 +22,7 @@ class User(
     val id: Int,
     @Column(name = "password")
     @JsonIgnore
-    val password: String,
+    val password: String?=null,
     @Column(name = "full_name")
     val fullName: String,
     @Column(name = "institute_of_management")
@@ -32,12 +32,12 @@ class User(
     val course: String,
 
 
-    val address: String,
+    val address: String?=null,
     @Column(name = "image_background")
     val imageBackground: String,
     @Column(name = "image_avatar")
     val imageAvatar: String,
-    val birthday: Date,
+    val birthday: Date?=null,
     val email: String,
 
     @Enumerated(EnumType.ORDINAL)
@@ -51,19 +51,19 @@ class User(
 
     @ManyToMany
     @JoinTable(name = "user_class", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_class")] )
-    val likedClasses: Set<ClassStudent>,
+    val likedClasses: Set<ClassStudent>?=null,
 
     @ManyToMany
     @JoinTable(name = "user_task", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_task")] )
-    val likedTasks: Set<Task>,
+    val likedTasks: Set<Task>?=null,
 
     @OneToMany(mappedBy = "user")
-    val comments: Set<Comments>,
+    val comments: Set<Comments>?=null,
 
     @OneToOne(mappedBy = "idStudent")
-    val pairingStudent: PairingTeacherWithStudent,
+    val pairingStudent: PairingTeacherWithStudent?=null,
     @OneToOne(mappedBy = "idTeacher")
-    val pairingTeacher: PairingTeacherWithStudent,
+    val pairingTeacher: PairingTeacherWithStudent?= null,
 
 
     )
