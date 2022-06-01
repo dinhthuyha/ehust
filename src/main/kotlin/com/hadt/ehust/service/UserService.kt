@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
+import javax.management.relation.Role
 
 @Service
 class UserService(
@@ -21,24 +22,28 @@ class UserService(
         return jwtUtils.generateAuthToken(authentication.principal as UserDetailsImpl)
     }
 
-    fun findUserById(id: Int): ResponseEntity<User> {
+    fun findUserByIdAndRole(id: Int, roleId: com.hadt.ehust.model.Role): ResponseEntity<User> {
         return userRepository.findById(id).map {
-            ResponseEntity.ok(
-                User(
-                    id = it.id,
-                    fullName = it.fullName,
-                    instituteOfManagement = it.instituteOfManagement,
-                    gender = it.gender,
-                    grade = it.grade,
-                    course = it.course,
-                    email = it.email,
-                    cadreStatus = it.cadreStatus ?: "",
-                    unit = it.unit,
-                    role = it.role,
-                    imageAvatar = it.imageAvatar,
-                    imageBackground = it.imageBackground
+            if (it.role == roleId){
+                ResponseEntity.ok(
+                    User(
+                        id = it.id,
+                        fullName = it.fullName,
+                        instituteOfManagement = it.instituteOfManagement,
+                        gender = it.gender,
+                        grade = it.grade,
+                        course = it.course,
+                        email = it.email,
+                        cadreStatus = it.cadreStatus ?: "",
+                        unit = it.unit,
+                        role = it.role,
+                        imageAvatar = it.imageAvatar,
+                        imageBackground = it.imageBackground
+                    )
                 )
-            )
+            }else {
+                ResponseEntity.notFound().build()
+            }
         }.orElse(ResponseEntity.notFound().build())
     }
 

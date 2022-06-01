@@ -30,8 +30,8 @@ class User(
     @Column(name = "institute_of_management")
     val instituteOfManagement: String,
     val gender: String,
-    val grade: String,
-    val course: String,
+    val grade: String? = null,
+    val course: String? = null,
 
 
     @Column(name = "image_background")

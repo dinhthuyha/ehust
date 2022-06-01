@@ -32,12 +32,12 @@ class JwtUtils {
         hashMap["id"] = user.id.toString()
         hashMap["role_id"] = user.role.name
         hashMap["full_name"] = user.fullName
-        hashMap["grade"] = user.grade
+        hashMap["grade"] = user.grade ?: ""
         hashMap["institute_of_management"] = user.instituteOfManagement
         hashMap["gender"] = user.gender
-        hashMap["course"] = user.course
+        hashMap["course"] = user.course ?: ""
         hashMap["email"] = user.email
-        hashMap["cadre_status"] = user.cadreStatus.toString()
+        hashMap["cadre_status"] = user.cadreStatus?: ""
         hashMap["unit"] = user.unit.toString()
         hashMap["image_background"] = user.imageBackground
         hashMap["image_avatar"] = user.imageAvatar
