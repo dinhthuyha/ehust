@@ -1,102 +1,32 @@
 package com.hadt.ehust.service
 
+import com.hadt.ehust.entities.ClassStudent
 import com.hadt.ehust.entities.User
-import com.hadt.ehust.exception.CustomException
 import com.hadt.ehust.repository.UserRepository
-import com.hadt.ehust.response.ProjectResponse
-import com.hadt.ehust.response.UserResponse
-import com.hadt.ehust.security.JwtTokenProvider
-import org.springframework.http.HttpStatus
+import com.hadt.ehust.security.JwtUtils
+import com.hadt.ehust.security.UserDetailsImpl
 import org.springframework.http.ResponseEntity
-
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
+import javax.management.relation.Role
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
-
-    private val jwtTokenProvider: JwtTokenProvider
+    private val authenticationManager: AuthenticationManager,
+    private val jwtUtils: JwtUtils
 ) {
-    fun signIn(id: Int, password: String): ResponseEntity<String> {
-        try {
-            // authenticationManager.authenticate(UsernamePasswordAuthenticationToken(id, password))
-            if (findUserById(id).body == null)
-                return ResponseEntity.notFound().build()
-            return ResponseEntity.ok(jwtTokenProvider.createToken(id, findUserById(id)))
-        } catch (e: Exception) {
-           return ResponseEntity.notFound().build()
-        }
+    fun signIn(id: Int, password: String): Map<String,Any> {
+        val authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(id, password))
+        return jwtUtils.generateAuthToken(authentication.principal as UserDetailsImpl)
     }
 
-    fun findUserById(id: Int): ResponseEntity<UserResponse> {
+    fun findUserByIdAndRole(id: Int, roleId: com.hadt.ehust.model.Role): ResponseEntity<User> {
         return userRepository.findById(id).map {
-            ResponseEntity.ok(
-                UserResponse(
-                    id = it.id,
-                    fullName = it.fullName,
-                    instituteOfManagement = it.instituteOfManagement,
-                    gender = it.gender,
-                    grade = it.grade,
-                    course = it.course,
-                    email = it.email,
-                    cadreStatus = it.cadreStatus ?: "",
-                    unit = it.unit,
-                    roleId = it.roleId,
-                    imageAvatar = it.imageAvatar,
-                    imageBackground = it.imageBackground
-                )
-            )
-        }.orElse(ResponseEntity.notFound().build())
-    }
-
-    fun findUserByFullName(fullName: String): ResponseEntity<UserResponse> {
-        return userRepository.findUserByFullName(fullName).map {
-            ResponseEntity.ok(
-                UserResponse(
-                    id = it.id,
-                    fullName = it.fullName,
-                    instituteOfManagement = it.instituteOfManagement,
-                    gender = it.gender,
-                    grade = it.grade,
-                    course = it.course,
-                    email = it.email,
-                    cadreStatus = it.cadreStatus ?: "",
-                    unit = it.unit,
-                    roleId = it.roleId,
-                    imageAvatar = it.imageAvatar,
-                    imageBackground = it.imageBackground
-                )
-            )
-        }.orElse(ResponseEntity.notFound().build())
-    }
-
-    fun findProfileById(id: Int): ResponseEntity<UserResponse> {
-        return userRepository.findById(id).map {
-            ResponseEntity.ok(
-                UserResponse(
-                    id = it.id,
-                    fullName = it.fullName,
-                    instituteOfManagement = it.instituteOfManagement,
-                    gender = it.gender,
-                    grade = it.grade,
-                    course = it.course,
-                    email = it.email,
-                    cadreStatus = it.cadreStatus ?: "",
-                    unit = it.unit,
-                    roleId = it.roleId,
-                    imageAvatar = it.imageAvatar,
-                    imageBackground = it.imageBackground
-                )
-            )
-        }.orElse(ResponseEntity.notFound().build())
-    }
-
-    fun findALlStudentInClass(grade: String): ResponseEntity<List<UserResponse>> {
-        val listUser = mutableListOf<UserResponse>()
-        return userRepository.getListStudentInClass(grade).map { users ->
-            users.forEach {
-                listUser.add(
-                    UserResponse(
+            if (it.role == roleId){
+                ResponseEntity.ok(
+                    User(
                         id = it.id,
                         fullName = it.fullName,
                         instituteOfManagement = it.instituteOfManagement,
@@ -106,7 +36,75 @@ class UserService(
                         email = it.email,
                         cadreStatus = it.cadreStatus ?: "",
                         unit = it.unit,
-                        roleId = it.roleId,
+                        role = it.role,
+                        imageAvatar = it.imageAvatar,
+                        imageBackground = it.imageBackground
+                    )
+                )
+            }else {
+                ResponseEntity.notFound().build()
+            }
+        }.orElse(ResponseEntity.notFound().build())
+    }
+
+    fun findUserByFullName(fullName: String): ResponseEntity<User> {
+        return userRepository.findUserByFullName(fullName).map {
+            ResponseEntity.ok(
+                User(
+                    id = it.id,
+                    fullName = it.fullName,
+                    instituteOfManagement = it.instituteOfManagement,
+                    gender = it.gender,
+                    grade = it.grade,
+                    course = it.course,
+                    email = it.email,
+                    cadreStatus = it.cadreStatus ?: "",
+                    unit = it.unit,
+                    role = it.role,
+                    imageAvatar = it.imageAvatar,
+                    imageBackground = it.imageBackground
+                )
+            )
+        }.orElse(ResponseEntity.notFound().build())
+    }
+
+    fun findProfileById(id: Int): ResponseEntity<User> {
+        return userRepository.findById(id).map {
+            ResponseEntity.ok(
+                User(
+                    id = it.id,
+                    fullName = it.fullName,
+                    instituteOfManagement = it.instituteOfManagement,
+                    gender = it.gender,
+                    grade = it.grade,
+                    course = it.course,
+                    email = it.email,
+                    cadreStatus = it.cadreStatus ?: "",
+                    unit = it.unit,
+                    role = it.role,
+                    imageAvatar = it.imageAvatar,
+                    imageBackground = it.imageBackground
+                )
+            )
+        }.orElse(ResponseEntity.notFound().build())
+    }
+
+    fun findALlStudentInClass(grade: String): ResponseEntity<List<User>> {
+        val listUser = mutableListOf<User>()
+        return userRepository.getListStudentInClass(grade).map { users ->
+            users.forEach {
+                listUser.add(
+                    User(
+                        id = it.id,
+                        fullName = it.fullName,
+                        instituteOfManagement = it.instituteOfManagement,
+                        gender = it.gender,
+                        grade = it.grade,
+                        course = it.course,
+                        email = it.email,
+                        cadreStatus = it.cadreStatus ?: "",
+                        unit = it.unit,
+                        role = it.role,
                         imageAvatar = it.imageAvatar,
                         imageBackground = it.imageBackground
                     )
@@ -116,12 +114,12 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ProjectResponse>> {
-        val projects = mutableListOf<ProjectResponse>()
+    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ClassStudent>> {
+        val projects = mutableListOf<ClassStudent>()
         return userRepository.findById(id).map { user ->
-            user.likedClasses.toList().forEach {
-                if (it.isProjectSubject) {
-                    val item = ProjectResponse(
+            user.likedClasses?.toList()?.forEach {
+                if (it.isProjectSubject==true) {
+                    val item = ClassStudent(
                         codeClass = it.codeClass,
                         codeCourse = it.codeCourse,
                         nameCourse = it.nameCourse,
@@ -140,5 +138,26 @@ class UserService(
         return userRepository.findAll()
     }
 
-
+    fun findByScheduleByIdStudent(id: Int): ResponseEntity<List<ClassStudent>>{
+        val classStudents = mutableListOf<ClassStudent>()
+       return userRepository.findById(id).map {user ->
+            val likedClasses =  user.likedClasses?.toList()
+            val semesterCurrent= likedClasses?.maxOf { it.semester!! }
+            likedClasses?.filter { !it.isProjectSubject!! && it.semester == semesterCurrent }?.forEach {
+                classStudents.add(
+                    ClassStudent(
+                        codeClass =it.codeClass,
+                        startTime = it.startTime,
+                        finishTime = it.finishTime,
+                        dateStudy = it.dateStudy,
+                        semester = it.semester,
+                        dateFinishCourse = it.dateFinishCourse,
+                        dateStartCourse = it.dateStartCourse,
+                        nameCourse = it.nameCourse
+                    )
+                )
+            }
+           ResponseEntity.ok(classStudents.toList())
+        }.orElse(ResponseEntity.notFound().build())
+    }
 }

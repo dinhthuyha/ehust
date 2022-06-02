@@ -26,9 +26,17 @@ dependencies {
     runtimeOnly("mysql:mysql-connector-java")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
+    // minio client
+//    implementation("io.minio:minio:8.4.1")
+//    implementation("com.squareup.okhttp3:okhttp:4.9.3")
+    implementation("org.springframework.boot:spring-boot-starter-security")
 
-    implementation("io.jsonwebtoken:jjwt:0.9.1")
-implementation("com.github.javafaker:javafaker:1.0.2")
+    // jjwt
+    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+    runtimeOnly("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+    implementation("com.github.javafaker:javafaker:1.0.2")
     implementation("org.springframework.boot:spring-boot-starter-validation")
 }
 

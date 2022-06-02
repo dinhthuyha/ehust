@@ -2,6 +2,7 @@ package com.hadt.ehust.controller
 
 import com.hadt.ehust.service.UserService
 import com.hadt.ehust.entities.User
+import com.hadt.ehust.model.Role
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -11,9 +12,9 @@ class UserController(
 ) {
 
     @PostMapping("/signin")
-    fun login(@RequestParam(name = "id") id: Int, @RequestParam(name = "password") password: String) = userService.signIn(id, password)
-
-
+    fun login(@RequestParam(name = "id") id: Int, @RequestParam(name = "password") password: String): Map<String,Any> {
+        return userService.signIn(id, password);
+    }
 
     @GetMapping("/users")
     fun getAllArticles(): List<User> =
@@ -35,10 +36,11 @@ class UserController(
     @GetMapping("/search/user/name/{fullName}")
     fun findUserByFullName(@PathVariable(value = "fullName") fullName: String) = userService.findUserByFullName(fullName)
 
-    @GetMapping("/search/user/id/{id}")
-    fun findUserById(@PathVariable(value = "id") id: Int) = userService.findUserById(id)
+    @GetMapping("/search/user/id/{id}/{roleId}")
+    fun findUserById(@PathVariable(value = "id") id: Int, @PathVariable(value = "roleId") roleId: Role) = userService.findUserByIdAndRole(id, roleId)
 
-
+    @GetMapping("/user/{id}/schedule")
+    fun findByScheduleByIdStudent(@PathVariable(value = "id") id: Int) = userService.findByScheduleByIdStudent(id)
 
 
 }
