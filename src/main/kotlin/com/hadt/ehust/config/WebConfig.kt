@@ -20,9 +20,13 @@ private class LoggingInterceptor: HandlerInterceptor {
     private val logger = LogManager.getLogger(LoggingInterceptor::class.java)
 
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        logger.info("{} --> {}", request.remoteAddr, request.requestURI)
-        logger.info("query string: {}", request.queryString)
-        logger.info("content-length: {}", request.contentLength)
+        logger.info("{}: {} --> {}", request.method, request.remoteAddr, request.requestURI)
+        request.queryString?.let {
+            logger.info("query string: {}", it)
+        }
+        request.contentLength.takeIf { it != -1 }?.let {
+            logger.info("content-length: {}", it)
+        }
         return true
     }
 }
