@@ -58,7 +58,7 @@ class ClassStudent (
     val studyForm: String? = null,
 
     @ManyToMany(mappedBy = "likedClasses")
-    @JsonIgnore
+
     val likes: Set<User>? = null,
 
 

@@ -29,7 +29,7 @@ class UserDetailsImpl(
 ): UserDetails {
 
     override fun getAuthorities(): MutableCollection<out GrantedAuthority> {
-        return mutableListOf(SimpleGrantedAuthority(user.role.name))
+        return mutableListOf(SimpleGrantedAuthority(user.role?.name))
     }
 
     override fun getPassword(): String {
