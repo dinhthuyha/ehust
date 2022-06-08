@@ -28,26 +28,26 @@ class User(
     @Column(name = "full_name")
     val fullName: String,
     @Column(name = "institute_of_management")
-    val instituteOfManagement: String,
-    val gender: String,
+    val instituteOfManagement: String? = null,
+    val gender: String? = null,
     val grade: String? = null,
     val course: String? = null,
 
 
     @Column(name = "image_background")
-    val imageBackground: String,
+    val imageBackground: String? = null,
     @Column(name = "image_avatar")
-    val imageAvatar: String,
-    val email: String,
+    val imageAvatar: String? = null,
+    val email: String? = null,
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "role_id")
-    val role: Role,
+    val role: Role? = null,
 
     @Column(name = "cadre_status")
-    val cadreStatus: String?,
+    val cadreStatus: String? = null,
     @Column(name = "unit")
-    val unit:String?,
+    val unit:String? = null,
 
     @ManyToMany
     @JoinTable(name = "user_class", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_class")] )

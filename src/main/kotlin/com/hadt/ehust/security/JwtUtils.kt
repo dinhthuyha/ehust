@@ -27,10 +27,10 @@ class JwtUtils {
     }
 
 
-    fun createToken( user: User): Map<String, String> {
-        val hashMap = hashMapOf<String, String>()
+    fun createToken( user: User): Map<String, String?> {
+        val hashMap = hashMapOf<String, String?>()
         hashMap["id"] = user.id.toString()
-        hashMap["role_id"] = user.role.name
+        hashMap["role_id"] = user.role?.name
         hashMap["full_name"] = user.fullName
         hashMap["grade"] = user.grade ?: ""
         hashMap["institute_of_management"] = user.instituteOfManagement
