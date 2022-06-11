@@ -20,7 +20,7 @@ class Subject(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
     val name: String,
-    @Column(name = " is_project")
+    @Column(name = "is_project")
     val isProject: Boolean = false,
 
     @OneToMany(mappedBy = "subject")
@@ -30,7 +30,7 @@ class Subject(
     val listClass: Set<ClassStudent>? = null,
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id_subject")
     val userSubject: User? = null
 
     )

@@ -16,11 +16,11 @@ class PairingTeacherWithStudent(
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
 
-    @Column(name = "id_student")
-    val idStudent : Int,
-
-    @Column(name = "id_teacher")
-    val idTeacher : User,
+//    @Column(name = "id_student")
+//    val idStudent : Int,
+//
+//    @Column(name = "id_teacher")
+//    val idTeacher : User,
 
     @Column(name = "name_project")
     val nameProject: String

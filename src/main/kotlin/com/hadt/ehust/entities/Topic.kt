@@ -15,7 +15,7 @@ import javax.persistence.*
 )
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class Topic (
+class Topic(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
@@ -23,6 +23,6 @@ class Topic (
     val idStudent: Int? = null,
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id_subject")
     val subject: Subject? = null
-        )
+)
