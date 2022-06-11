@@ -63,5 +63,9 @@ class ClassStudent (
 
 
     @OneToMany(mappedBy = "mClass")
-    val tasks: Set<Task>? = null
+    val tasks: Set<Task>? = null,
+
+    @ManyToOne
+    @JoinColumn(name = "id")
+    val subjectClass: Subject? = null
 )

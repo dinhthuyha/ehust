@@ -60,10 +60,6 @@ class User(
     @OneToMany(mappedBy = "user")
     val comments: Set<Comments>?=null,
 
-    @OneToOne(mappedBy = "idStudent")
-    val pairingStudent: PairingTeacherWithStudent?=null,
-    @OneToOne(mappedBy = "idTeacher")
-    val pairingTeacher: PairingTeacherWithStudent?= null,
-
-
+    @OneToMany(mappedBy = "userSubject")
+    val subjects: Set<Subject>? = null
     )
