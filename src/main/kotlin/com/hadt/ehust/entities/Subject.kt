@@ -29,7 +29,7 @@ class Subject(
     val listClass: Set<ClassStudent>? = null,
 
     @ManyToOne
-    @JoinColumn(name = "id_subject")
+    @JoinColumn(name = "id_user")
     val userSubject: User? = null
 
     )
