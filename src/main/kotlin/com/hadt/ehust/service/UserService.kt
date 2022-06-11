@@ -121,8 +121,6 @@ class UserService(
                 if (it.isProjectSubject==true) {
                     val item = ClassStudent(
                         codeClass = it.codeClass,
-                        codeCourse = it.codeCourse,
-                        nameCourse = it.nameCourse,
                         semester = it.semester,
                         nameTeacher = it.nameTeacher ?: "",
                         studyForm = it.studyForm
@@ -152,8 +150,7 @@ class UserService(
                         dateStudy = it.dateStudy,
                         semester = it.semester,
                         dateFinishCourse = it.dateFinishCourse,
-                        dateStartCourse = it.dateStartCourse,
-                        nameCourse = it.nameCourse
+                        dateStartCourse = it.dateStartCourse
                     )
                 )
             }

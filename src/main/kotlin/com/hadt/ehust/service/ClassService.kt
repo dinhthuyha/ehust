@@ -12,14 +12,7 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
     fun findById(id: Int): ResponseEntity<ClassStudent> {
         return classStudentRepository.findById(id).map {
             ResponseEntity.ok(
-                ClassStudent(
-                    codeClass = it.codeClass,
-                    codeCourse = it.codeCourse,
-                    nameCourse = it.nameCourse,
-                    semester = it.semester,
-                    nameTeacher = it.nameTeacher ?: "",
-                    studyForm = it.studyForm
-                )
+               it
             )
         }.orElse(ResponseEntity.notFound().build())
     }
@@ -61,7 +54,6 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
             newProjects.add(
                 ClassStudent(
                     codeClass = it.codeClass,
-                    nameCourse = it.nameCourse,
                     semester = it.semester
                 )
             )

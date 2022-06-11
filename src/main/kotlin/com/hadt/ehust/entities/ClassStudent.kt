@@ -23,12 +23,6 @@ class ClassStudent (
     @Column(name = "code_class")
     val codeClass: Int,
 
-    @Column(name = "code_course")
-    val codeCourse: String? = null,
-
-    @Column(name = "name_course")
-    val nameCourse:String? = null,
-
     @Column(name = "name_teacher")
     val nameTeacher:String? = null,
 
@@ -66,6 +60,6 @@ class ClassStudent (
     val tasks: Set<Task>? = null,
 
     @ManyToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "id_subject")
     val subjectClass: Subject? = null
 )

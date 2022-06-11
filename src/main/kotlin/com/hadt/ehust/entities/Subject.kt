@@ -18,11 +18,10 @@ import javax.persistence.*
 class Subject(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Int,
+    val id: String,
     val name: String,
     @Column(name = "is_project")
     val isProject: Boolean = false,
-
     @OneToMany(mappedBy = "subject")
     val topics: Set<Topic>? = null,
 
