@@ -22,20 +22,17 @@ class Subject(
     val id: String,
     val name: String,
     @Column(name = "is_project")
-    val isProject: Boolean = false,
+    val isProject: Boolean? = null,
 
 
+    @ManyToMany(mappedBy = "userSubjects")
+    val userSubject: Set<User>? = null,
 
     @OneToMany(mappedBy = "subject")
     val topics: Set<Topic>? = null,
 
-    @JsonIgnore
+
     @OneToMany(mappedBy = "subjectClass")
     val listClass: Set<ClassStudent>? = null,
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name = "id_user")
-    val userSubject: User? = null
 
     )

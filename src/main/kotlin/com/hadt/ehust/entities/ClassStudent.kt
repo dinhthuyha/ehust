@@ -46,9 +46,10 @@ class ClassStudent (
     @Column(name = "study_form")
     val studyForm: String? = null,
     val semester: Int? = null,
-    @ManyToMany(mappedBy = "likedClasses")
 
+    @ManyToMany(mappedBy = "likedClasses")
     val likes: Set<User>? = null,
+
 
 
     @OneToMany(mappedBy = "mClass")

@@ -1,6 +1,7 @@
 package com.hadt.ehust.service
 
 import com.hadt.ehust.entities.ClassStudent
+import com.hadt.ehust.entities.Subject
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.security.JwtUtils
@@ -137,25 +138,36 @@ class UserService(
         return userRepository.findAll()
     }
 
-    fun findByScheduleByIdStudent(id: Int): ResponseEntity<List<ClassStudent>>{
+    fun findByScheduleByIdStudent(id: Int): ResponseEntity<List<ClassStudent>> {
         val classStudents = mutableListOf<ClassStudent>()
-       return userRepository.findById(id).map {user ->
-            val likedClasses =  user.likedClasses?.toList()
-            val semesterCurrent= likedClasses?.maxOf { it.semester!! }
-            likedClasses?.filter { it.subjectClass?.isProject == false && it.semester == semesterCurrent }?.forEach {
-                classStudents.add(
-                    ClassStudent(
-                        codeClass =it.codeClass,
-                        startTime = it.startTime,
-                        finishTime = it.finishTime,
-                        dateStudy = it.dateStudy,
-                        subjectClass = it.subjectClass,
-                        dateFinishCourse = it.dateFinishCourse,
-                        dateStartCourse = it.dateStartCourse
-                    )
-                )
-            }
-           ResponseEntity.ok(classStudents.toList())
+        return userRepository.findById(id).map { user ->
+            user.userSubjects
+                ?.toList()
+                ?.filter { it.isProject == false }
+                ?.forEach { subject ->
+                    val semesterCurrent = subject.listClass?.toList()?.maxOfOrNull { it.semester!! }
+                    subject.listClass
+                        ?.filter { it.semester == semesterCurrent }
+                        ?.forEach {
+                            val subject = Subject(
+                                id = it.subjectClass?.id!!,
+                                name = it.subjectClass?.name
+                            )
+                            classStudents.add(
+                                ClassStudent(
+                                    codeClass = it.codeClass,
+                                    startTime = it.startTime,
+                                    finishTime = it.finishTime,
+                                    dateStudy = it.dateStudy,
+                                    subjectClass = subject,
+                                    dateFinishCourse = it.dateFinishCourse,
+                                    dateStartCourse = it.dateStartCourse
+                                )
+                            )
+                        }
+
+                }
+            ResponseEntity.ok(classStudents.toList())
         }.orElse(ResponseEntity.notFound().build())
     }
 }
