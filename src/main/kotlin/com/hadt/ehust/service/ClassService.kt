@@ -1,6 +1,7 @@
 package com.hadt.ehust.service
 
 import com.hadt.ehust.entities.ClassStudent
+import com.hadt.ehust.entities.Subject
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.repository.ClassStudentRepository
 
@@ -14,7 +15,12 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
             ResponseEntity.ok(
                ClassStudent(
                    codeClass = it.codeClass,
-                   subjectClass = it.subjectClass
+                   semester = it.semester,
+                   studyForm = it.studyForm,
+                   subjectClass = Subject(
+                       it.subjectClass?.id!!,
+                       it.subjectClass?.name
+                   )
                )
             )
         }.orElse(ResponseEntity.notFound().build())
