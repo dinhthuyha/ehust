@@ -12,15 +12,15 @@ import javax.persistence.*
     generator = ObjectIdGenerators.PropertyGenerator::class,
     property = "id"
 )
-class PairingTeacherWithStudent(
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Int,
+data class PairingTeacherWithStudent(
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null,
 
-//    @Column(name = "id_student")
-//    val idStudent : Int,
-//
-//    @Column(name = "id_teacher")
-//    val idTeacher : User,
+    @Column(name = "id_student")
+    val idStudent : Int,
+
+    @Column(name = "id_teacher")
+    val idTeacher : Int,
 
     @Column(name = "name_project")
     val nameProject: String

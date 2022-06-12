@@ -57,7 +57,8 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
         val newProjects = mutableListOf<ClassStudent>()
         val projects = classStudentRepository.findAll()
         val semesterCurrent = projects.maxOf { it.semester!! }
-        projects.filter { it?.semester == semesterCurrent }.forEach {
+        projects.filter { it.subjectClass?.isProject ==true && it?.semester == semesterCurrent }.forEach {
+
             newProjects.add(
                 ClassStudent(
                     codeClass = it.codeClass,

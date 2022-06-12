@@ -17,7 +17,7 @@ import javax.persistence.*
 )
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class ClassStudent (
+data class ClassStudent (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "code_class")
