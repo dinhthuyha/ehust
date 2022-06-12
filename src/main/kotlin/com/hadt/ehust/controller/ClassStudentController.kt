@@ -25,11 +25,4 @@ class ClassStudentController(private val classService: ClassService) {
     @GetMapping("project/current/semester")
     fun findAllProjectCurrentSemester() = classService.findAllProjectCurrentSemester()
 
-    /**
-     * Tim tat cac user trong lop hoc ki B va hoc mon A
-     *
-     */
-    @GetMapping("project/users/{semester}/{nameCourse}")
-    fun findAllUserInClass(@PathVariable(value = "semester") semester: Int, @PathVariable(value = "nameCourse") nameCourse: String) =
-        classService.findAllUserInClass(semester, nameCourse)
 }

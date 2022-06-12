@@ -72,25 +72,7 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
         return ResponseEntity.ok(newProjects.distinct())
     }
 
-    /**
-     * find all user in class ( semester, name) with student
-     */
-    fun findAllUserInClass(semester: Int, nameCourse: String): ResponseEntity<List<User>> {
-        val users = mutableListOf<User>()
-        return classStudentRepository.findAllUserInClass(semester, nameCourse).map { listClass ->
-            listClass.forEach { item ->
-                item.likes?.toList()?.forEach {
-                    users.add(
-                        User(
-                            id = it.id,
-                            fullName = it.fullName
-                        )
-                    )
-                }
-            }
-            ResponseEntity.ok(users.toList())
-        }.orElse(ResponseEntity.notFound().build())
-    }
+
 
 
 }
