@@ -1,5 +1,6 @@
 package com.hadt.ehust.service
 
+import com.hadt.ehust.entities.ClassStudent
 import com.hadt.ehust.repository.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -7,11 +8,8 @@ import org.springframework.stereotype.Service
 
 @Service
 class ShareService(
-    private val pairingRepository: PairingRepository,
-    private val topicRepository: TopicRepository,
     private val classStudentRepository: ClassStudentRepository,
     private val userRepository: UserRepository,
-    private val subjectRepository: SubjectRepository
 ) {
 
     fun updateTopicAssign(idTeacher: Int, idStudent: Int, nameProject: String): ResponseEntity<Unit>{
@@ -25,11 +23,15 @@ class ShareService(
                 ?.listClass
                 ?.firstOrNull()
                  ?.let { oldClass ->
-                     val newClass = oldClass.copy(nameTeacher = nameTeacher)
+                     var newClass = oldClass
+                     newClass.nameTeacher = nameTeacher
+                     classStudentRepository.save(newClass)
                  }
+
 
            ResponseEntity<Unit>(HttpStatus.OK)
 
         }.orElse(ResponseEntity.notFound().build())
     }
+
 }

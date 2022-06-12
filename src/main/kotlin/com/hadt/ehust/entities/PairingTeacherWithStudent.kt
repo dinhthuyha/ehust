@@ -12,7 +12,7 @@ import javax.persistence.*
     generator = ObjectIdGenerators.PropertyGenerator::class,
     property = "id"
 )
-data class PairingTeacherWithStudent(
+class PairingTeacherWithStudent(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
 

@@ -36,8 +36,8 @@ class UserController(
     /**
      * TODO: Lay danh sach cac project da lam
      */
-    @GetMapping("/user/projects/{id}")
-    fun findAllProjectsByStudentId(@PathVariable(value = "id") id: Int) = userService.findAllProjectsByIdStudent(id)
+    @GetMapping("/user/projects/{id}/{role}")
+    fun findAllProjectsByStudentId(@PathVariable(value = "id") id: Int, @PathVariable(value = "role") role: Role) = userService.findAllProjectsByIdStudent(id, role)
 
     /**
      * TODO tim kiem sinh vien theo fullname

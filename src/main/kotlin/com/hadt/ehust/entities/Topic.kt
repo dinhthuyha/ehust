@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.hadt.ehust.model.StatusTopic
 import javax.persistence.*
 
 @Entity
@@ -21,6 +22,11 @@ data class Topic(
     val id: Int,
     val name: String,
     val idStudent: Int? = null,
+    val idTeacher: Int? = null,
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "status_topic")
+    val status: StatusTopic? = null,
 
     @ManyToOne
     @JoinColumn(name = "id_subject")

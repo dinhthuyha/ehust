@@ -17,14 +17,14 @@ import javax.persistence.*
 )
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class ClassStudent (
+class ClassStudent (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "code_class")
     val codeClass: Int,
 
     @Column(name = "name_teacher")
-    val nameTeacher:String? = null,
+    var nameTeacher:String? = null,
 
     @Column(name = "start_time")
    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")

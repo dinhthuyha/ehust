@@ -10,16 +10,30 @@ import org.springframework.stereotype.Service
 class SubjectService( private val subjectRepository: SubjectRepository) {
 
     fun findAllUserInClass(semester: Int, nameCourse: String, role: Role): ResponseEntity<List<User>> {
-        val users = mutableListOf<User>()
-        return subjectRepository.findAllUserInClass( nameCourse).map { sub ->
-            sub.listClass?.filter { it.semester == semester }?.forEach { itemClass ->
-                itemClass.likes?.toList()?.filter { it.role == role }?.forEach {
-                    users.add(User(
-                        id = it.id,
-                        fullName = it.fullName
-                    ))
+        var users = mutableListOf<User>()
+        return subjectRepository.findAllUserInClass(nameCourse).map { sub ->
+            if (role == Role.ROLE_TEACHER) {
+                sub.userSubject?.toList()?.filter { it.role == role }?.toMutableList()?.let {
+                    it.forEach { user ->
+                        users.add(
+                            User(
+                                id = user.id,
+                                fullName = user.fullName
+                            )
+                        )
+                    }
+                }
+            }else if (role == Role.ROLE_STUDENT){
+                sub.listClass?.filter { it.semester == semester }?.forEach { itemClass ->
+                    itemClass.likes?.toList()?.filter { it.role == role }?.forEach {
+                        users.add(User(
+                            id = it.id,
+                            fullName = it.fullName
+                        ))
+                    }
                 }
             }
+
             ResponseEntity.ok(users.toList())
         }.orElse(ResponseEntity.notFound().build())
     }

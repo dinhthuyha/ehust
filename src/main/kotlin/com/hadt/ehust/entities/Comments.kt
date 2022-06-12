@@ -12,7 +12,7 @@ import javax.persistence.*
     generator = ObjectIdGenerators.PropertyGenerator::class,
     property = "id"
 )
-data class Comments(
+class Comments(
     @Id
 
     @GeneratedValue(strategy = GenerationType.AUTO)

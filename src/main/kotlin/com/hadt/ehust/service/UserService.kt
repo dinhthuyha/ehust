@@ -3,6 +3,9 @@ package com.hadt.ehust.service
 import com.hadt.ehust.entities.ClassStudent
 import com.hadt.ehust.entities.Subject
 import com.hadt.ehust.entities.User
+import com.hadt.ehust.model.Project
+import com.hadt.ehust.model.Role
+import com.hadt.ehust.repository.PairingRepository
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.security.JwtUtils
 import com.hadt.ehust.security.UserDetailsImpl
@@ -10,22 +13,22 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.stereotype.Service
-import javax.management.relation.Role
 
 @Service
 class UserService(
     private val userRepository: UserRepository,
+    private val pairingRepository: PairingRepository,
     private val authenticationManager: AuthenticationManager,
     private val jwtUtils: JwtUtils
 ) {
-    fun signIn(id: Int, password: String): Map<String,Any> {
+    fun signIn(id: Int, password: String): Map<String, Any> {
         val authentication = authenticationManager.authenticate(UsernamePasswordAuthenticationToken(id, password))
         return jwtUtils.generateAuthToken(authentication.principal as UserDetailsImpl)
     }
 
     fun findUserByIdAndRole(id: Int, roleId: com.hadt.ehust.model.Role): ResponseEntity<User> {
         return userRepository.findById(id).map {
-            if (it.role == roleId){
+            if (it.role == roleId) {
                 ResponseEntity.ok(
                     User(
                         id = it.id,
@@ -42,7 +45,7 @@ class UserService(
                         imageBackground = it.imageBackground
                     )
                 )
-            }else {
+            } else {
                 ResponseEntity.notFound().build()
             }
         }.orElse(ResponseEntity.notFound().build())
@@ -115,28 +118,62 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<ClassStudent>> {
-        val projects = mutableListOf<ClassStudent>()
-        return userRepository.findById(id).map { user ->
-            user.likedClasses?.toList()?.forEach {
-                if (it.subjectClass?.isProject==true) {
-                    val item = ClassStudent(
-                        subjectClass = Subject(
-                            it.subjectClass.id,
-                            it.subjectClass.name
-                        ),
-                        codeClass = it.codeClass,
-                        nameTeacher = it.nameTeacher ?: "",
-                        studyForm = it.studyForm,
-                        semester = it.semester
-                    )
-                    projects.add(item)
+    fun findAllProjectsByIdStudent(id: Int, role: Role): ResponseEntity<List<Project>> {
+        val projects = mutableListOf<Project>()
+
+      return  userRepository.findById(id).map { user ->
+                when(role){
+                    Role.ROLE_TEACHER -> {
+                        val semesterCurrent = user.userSubjects
+                            ?.filter { it.semesterTeacherProject != null }
+                            ?.maxOf { it.semesterTeacherProject!! }
+
+                        user.userSubjects
+                            ?.filter { it.isProject == true && it.semesterTeacherProject == semesterCurrent }
+                            ?.forEach {
+                                projects.add(
+                                    Project(
+                                        codeCourse = it.id,
+                                        name = it.name
+                                    )
+                                )
+                            }
+                    }
+                    Role.ROLE_STUDENT -> {
+                        user.userSubjects?.filter { it.isProject == true }?.forEach {
+                            it.listClass?.forEach { classStu ->
+                                projects.add(
+                                    Project(
+                                        codeClass = classStu.codeClass,
+                                        codeCourse = classStu.subjectClass?.id,
+                                        name = classStu.subjectClass?.name,
+                                        semester = classStu.semester,
+                                        nameTeacher = getTeacherAssignedUser(classStu.subjectClass?.name,id)
+                                    )
+                                )
+                            }
+                        }
+                        projects.sortByDescending { it.semester }
+                    }
+
+                    else ->{}
+
                 }
-            }
-            ResponseEntity.ok(projects.toList().sortedByDescending { it?.semester })
+
+            ResponseEntity.ok(projects.toList())
         }.orElse(ResponseEntity.notFound().build())
+
     }
 
+    private fun getTeacherAssignedUser(nameCourse: String?, idStudent: Int): String{
+        var nameTeacher = ""
+        pairingRepository.findUserByIdStudentAndNameProject(idStudent, nameCourse).map { pair ->
+            userRepository.findById(pair.idTeacher).map {
+                nameTeacher = it.fullName
+            }
+        }
+        return nameTeacher
+    }
     fun findAll(): List<User> {
         return userRepository.findAll()
     }
@@ -154,7 +191,7 @@ class UserService(
                         ?.forEach {
                             val subject = Subject(
                                 id = it.subjectClass?.id!!,
-                                name = it.subjectClass?.name
+                                name = it.subjectClass?.name!!
                             )
                             classStudents.add(
                                 ClassStudent(

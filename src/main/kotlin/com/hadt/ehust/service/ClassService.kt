@@ -19,7 +19,7 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
                    studyForm = it.studyForm,
                    subjectClass = Subject(
                        it.subjectClass?.id!!,
-                       it.subjectClass?.name
+                       it.subjectClass?.name!!
                    )
                )
             )
@@ -64,7 +64,7 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
                     codeClass = it.codeClass,
                     subjectClass = Subject(
                         it.subjectClass?.id!!,
-                        it.subjectClass.name
+                        it.subjectClass?.name!!
                     )
                 )
             )
