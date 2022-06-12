@@ -118,17 +118,18 @@ class UserService(
         val projects = mutableListOf<ClassStudent>()
         return userRepository.findById(id).map { user ->
             user.likedClasses?.toList()?.forEach {
-                if (it.isProjectSubject==true) {
+                if (it.subjectClass?.isProject==true) {
                     val item = ClassStudent(
+                        subjectClass = it.subjectClass,
                         codeClass = it.codeClass,
-                        semester = it.semester,
                         nameTeacher = it.nameTeacher ?: "",
-                        studyForm = it.studyForm
+                        studyForm = it.studyForm,
+                        semester = it.semester
                     )
                     projects.add(item)
                 }
             }
-            ResponseEntity.ok(projects.toList().sortedByDescending { it.semester })
+            ResponseEntity.ok(projects.toList().sortedByDescending { it?.semester })
         }.orElse(ResponseEntity.notFound().build())
     }
 
@@ -141,14 +142,14 @@ class UserService(
        return userRepository.findById(id).map {user ->
             val likedClasses =  user.likedClasses?.toList()
             val semesterCurrent= likedClasses?.maxOf { it.semester!! }
-            likedClasses?.filter { !it.isProjectSubject!! && it.semester == semesterCurrent }?.forEach {
+            likedClasses?.filter { it.subjectClass?.isProject == false && it.semester == semesterCurrent }?.forEach {
                 classStudents.add(
                     ClassStudent(
                         codeClass =it.codeClass,
                         startTime = it.startTime,
                         finishTime = it.finishTime,
                         dateStudy = it.dateStudy,
-                        semester = it.semester,
+                        subjectClass = it.subjectClass,
                         dateFinishCourse = it.dateFinishCourse,
                         dateStartCourse = it.dateStartCourse
                     )

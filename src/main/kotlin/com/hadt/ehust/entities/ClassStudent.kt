@@ -26,11 +26,6 @@ class ClassStudent (
     @Column(name = "name_teacher")
     val nameTeacher:String? = null,
 
-    @Column(name = "is_project_subject")
-    var isProjectSubject: Boolean? = null,
-
-    val semester: Int? = null,
-
     @Column(name = "start_time")
    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     val startTime: LocalTime? = null,
@@ -50,7 +45,7 @@ class ClassStudent (
 
     @Column(name = "study_form")
     val studyForm: String? = null,
-
+    val semester: Int? = null,
     @ManyToMany(mappedBy = "likedClasses")
 
     val likes: Set<User>? = null,
