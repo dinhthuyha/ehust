@@ -61,7 +61,10 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
             newProjects.add(
                 ClassStudent(
                     codeClass = it.codeClass,
-                    subjectClass = it.subjectClass
+                    subjectClass = Subject(
+                        it.subjectClass?.id!!,
+                        it.subjectClass.name
+                    )
                 )
             )
         }
