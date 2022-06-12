@@ -52,9 +52,7 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    /**
-     * return list project in current semester
-     */
+
     fun findAllProjectCurrentSemester(): ResponseEntity<List<ClassStudent?>> {
         val newProjects = mutableListOf<ClassStudent>()
         val projects = classStudentRepository.findAll()

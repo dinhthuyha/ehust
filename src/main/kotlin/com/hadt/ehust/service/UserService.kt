@@ -121,7 +121,10 @@ class UserService(
             user.likedClasses?.toList()?.forEach {
                 if (it.subjectClass?.isProject==true) {
                     val item = ClassStudent(
-                        subjectClass = it.subjectClass,
+                        subjectClass = Subject(
+                            it.subjectClass.id,
+                            it.subjectClass.name
+                        ),
                         codeClass = it.codeClass,
                         nameTeacher = it.nameTeacher ?: "",
                         studyForm = it.studyForm,

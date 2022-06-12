@@ -13,17 +13,21 @@ class ClassStudentController(private val classService: ClassService) {
     @GetMapping("/search/class/{id}")
     fun findClassById(@PathVariable(value = "id") id: Int) = classService.findById(id)
 
+    /**
+     * danh sach sinh vien hoc trong lop co id class
+     */
     @GetMapping("/search/class/project/{id}")
     fun findAllUserClass(@PathVariable(value = "id") id: Int) = classService.findAllClassProject(id)
 
     /**
-     * return list project in current semester
+     * danh sach project sinh vien toan truong hoc trong ki nay
      */
     @GetMapping("project/current/semester")
     fun findAllProjectCurrentSemester() = classService.findAllProjectCurrentSemester()
 
     /**
-     * find all user in class ( semester, name) with student
+     * Tim tat cac user trong lop hoc ki B va hoc mon A
+     *
      */
     @GetMapping("project/users/{semester}/{nameCourse}")
     fun findAllUserInClass(@PathVariable(value = "semester") semester: Int, @PathVariable(value = "nameCourse") nameCourse: String) =
