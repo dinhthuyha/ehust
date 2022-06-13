@@ -59,3 +59,31 @@ class ClassStudent (
     @JoinColumn(name = "id_subject")
     val subjectClass: Subject? = null
 )
+
+fun ClassStudent.copy(
+    codeClass: Int = this.codeClass,
+    nameTeacher:String? = this.nameTeacher,
+    startTime: LocalTime? = this.startTime,
+    finishTime: LocalTime? = this.finishTime,
+    dateStudy:String? = this.dateStudy,
+    dateFinishCourse: LocalDate? = this.dateFinishCourse,
+    dateStartCourse: LocalDate? = this.dateStartCourse,
+    studyForm: String? = this.studyForm,
+    semester: Int? = this.semester,
+    likes: Set<User>? = this.likes,
+    tasks: Set<Task>? = this.tasks,
+    subjectClass: Subject? = this.subjectClass
+) = ClassStudent(
+    codeClass,
+    nameTeacher,
+    startTime,
+    finishTime,
+    dateStudy,
+    dateFinishCourse,
+    dateStartCourse,
+    studyForm,
+    semester,
+    likes,
+    tasks,
+    subjectClass
+)

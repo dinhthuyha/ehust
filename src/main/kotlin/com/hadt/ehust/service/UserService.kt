@@ -125,11 +125,9 @@ class UserService(
                 when(role){
                     Role.ROLE_TEACHER -> {
                         val semesterCurrent = user.userSubjects
-                            ?.filter { it.semesterTeacherProject != null }
-                            ?.maxOf { it.semesterTeacherProject!! }
 
                         user.userSubjects
-                            ?.filter { it.isProject == true && it.semesterTeacherProject == semesterCurrent }
+                            ?.filter { it.isProject == true  }
                             ?.forEach {
                                 projects.add(
                                     Project(

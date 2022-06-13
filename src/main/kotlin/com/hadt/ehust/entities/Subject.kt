@@ -24,8 +24,7 @@ class Subject(
     @Column(name = "is_project")
     val isProject: Boolean? = null,
 
-    //ki hoc ma gv day mon Project A
-    val semesterTeacherProject: Int? = null,
+
     @ManyToMany(mappedBy = "userSubjects")
     val userSubject: Set<User>? = null,
 

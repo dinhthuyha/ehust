@@ -15,4 +15,11 @@ class News(
     @Column(name = "date_post")
     @JsonProperty("date_post")
     val datePost: String
-)
+) {
+    fun copy(
+        id: Int = this.id,
+        title: String = this.title,
+        content: String = this.content,
+        datePost: String = this.datePost
+    ): News = News(id, title, content, datePost)
+}

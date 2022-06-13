@@ -21,7 +21,10 @@ data class Topic(
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
     val name: String,
+    @Column(name = "id_student")
     val idStudent: Int? = null,
+
+    @Column(name = "id_teacher")
     val idTeacher: Int? = null,
 
     @Enumerated(EnumType.ORDINAL)
@@ -32,3 +35,12 @@ data class Topic(
     @JoinColumn(name = "id_subject")
     val subject: Subject? = null
 )
+
+fun Topic.copy(
+    id: Int = this.id,
+    name: String = this.name,
+    idStudent: Int? = this.idStudent,
+    idTeacher: Int? = this.idTeacher,
+    status: StatusTopic? = this.status,
+    subject: Subject? = this.subject,
+) = Topic(id, name, idStudent, idTeacher, status, subject)
