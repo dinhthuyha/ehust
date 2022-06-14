@@ -12,4 +12,6 @@ import java.util.*
 @Repository
 interface TopicRepository : JpaRepository<Topic,Int> {
     fun findByName(name:String):Topic?
+
+    fun findByIdTeacher(idTeacher: Int): List<Topic>?
 }

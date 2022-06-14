@@ -16,7 +16,7 @@ import javax.persistence.*
 )
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-data class Topic(
+class Topic(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
