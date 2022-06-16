@@ -13,9 +13,19 @@ import org.springframework.stereotype.Service
 @Service
 class TopicService(private val topicRepository: TopicRepository) {
 
-    fun updateTopicStatus(name: String, status: StatusTopic): ResponseEntity<Unit> {
-        topicRepository.findByName(name)?.copy(status = status)?.let {
-            topicRepository.save(it)
+    fun updateTopicStatus(idTopic: Int, status: StatusTopic, idStudent: Int): ResponseEntity<Unit> {
+
+        topicRepository.findById(idTopic).map{
+            if (idStudent !=0){
+                it.copy(status = status).let {
+                    topicRepository.save(it)
+                }
+            }else{
+                it.copy(status = status, idStudent = idStudent).let {
+                    topicRepository.save(it)
+                }
+            }
+
         }
         return ResponseEntity<Unit>(HttpStatus.OK)
     }
@@ -26,6 +36,7 @@ class TopicService(private val topicRepository: TopicRepository) {
             ?.map {
                 it.copy(subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()))
             }
+
 
         return ResponseEntity.ok().body(topics)
     }

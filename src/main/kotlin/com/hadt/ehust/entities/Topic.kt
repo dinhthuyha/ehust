@@ -24,8 +24,14 @@ class Topic(
     @Column(name = "id_student")
     val idStudent: Int? = null,
 
+    @Transient
+    val nameStudent: String? = null,
+
     @Column(name = "id_teacher")
     val idTeacher: Int? = null,
+
+   @Transient
+    val nameTeacher: String? = null,
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status_topic")
@@ -42,5 +48,13 @@ fun Topic.copy(
     idStudent: Int? = this.idStudent,
     idTeacher: Int? = this.idTeacher,
     status: StatusTopic? = this.status,
-    subject: Subject? = this.subject,
-) = Topic(id, name, idStudent, idTeacher, status, subject)
+    subject: Subject? = this.subject
+
+) = Topic(
+    id = id,
+    name = name,
+    idStudent = idStudent,
+    idTeacher = idTeacher,
+    status = status,
+    subject = subject,
+    )
