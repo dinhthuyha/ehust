@@ -1,5 +1,6 @@
 package com.hadt.ehust.controller
 
+import com.hadt.ehust.model.Role
 import com.hadt.ehust.model.StatusTopic
 import com.hadt.ehust.repository.PairingRepository
 import com.hadt.ehust.service.TopicService
@@ -26,9 +27,10 @@ class TopicController(
     /**
      * xem ds topic theo (id_gv, ten do an)
      */
-    @GetMapping("topic/teacher/{id_teacher}/{id_project}")
+    @GetMapping("topic/teacher/{id_teacher}/{id_project}/{role}")
     fun findTopicByNameProjectAndIdTeacher(
         @PathVariable(value = "id_teacher") idTeacher: Int,
-        @PathVariable(value = "id_project") idProject: String
-    ) = topicService.findTopicByNameProjectAndIdTeacher(idTeacher, idProject)
+        @PathVariable(value = "id_project") idProject: String,
+        @PathVariable(value = "role") role: Role
+    ) = topicService.findTopicByNameProjectAndIdTeacher(idTeacher, idProject, role)
 }
