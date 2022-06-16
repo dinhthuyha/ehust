@@ -9,6 +9,7 @@ import com.hadt.ehust.repository.PairingRepository
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.security.JwtUtils
 import com.hadt.ehust.security.UserDetailsImpl
+import com.hadt.ehust.utils.Utils
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -118,13 +119,12 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findAllProjectsByIdStudent(id: Int, role: Role): ResponseEntity<List<Project>> {
+    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<Project>> {
         val projects = mutableListOf<Project>()
 
       return  userRepository.findById(id).map { user ->
-                when(role){
-                    Role.ROLE_TEACHER -> {
-                        val semesterCurrent = user.userSubjects
+                when(Utils.hasRole(Role.ROLE_TEACHER)){
+                    true -> {
 
                         user.userSubjects
                             ?.filter { it.isProject == true  }
@@ -137,7 +137,7 @@ class UserService(
                                 )
                             }
                     }
-                    Role.ROLE_STUDENT -> {
+                    false -> {
                         user.userSubjects?.filter { it.isProject == true }?.forEach {
                             it.listClass?.forEach { classStu ->
                                 projects.add(
@@ -153,8 +153,6 @@ class UserService(
                         }
                         projects.sortByDescending { it.semester }
                     }
-
-                    else ->{}
 
                 }
 

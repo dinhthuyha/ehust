@@ -7,9 +7,11 @@ import com.hadt.ehust.model.Role
 import com.hadt.ehust.model.StatusTopic
 import com.hadt.ehust.repository.TopicRepository
 import com.hadt.ehust.repository.UserRepository
+import com.hadt.ehust.utils.Utils
 import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
@@ -34,13 +36,13 @@ class TopicService(private val topicRepository: TopicRepository,
         return ResponseEntity<Unit>(HttpStatus.OK)
     }
 
-    fun findTopicByNameProjectAndIdTeacher(idTeacher: Int, idProject: String, role: Role): ResponseEntity<List<Topic>>? {
+    fun findTopicByNameProjectAndIdTeacher(idTeacher: Int, idProject: String): ResponseEntity<List<Topic>>? {
 
         val topics = topicRepository.findByIdTeacher(idTeacher)?.filter { it.subject?.id == idProject }
             ?.map {
 
-                if (role == Role.ROLE_TEACHER){
-                    val nameStudent = it.idStudent?.let { it1 -> userRepository.findById(it1) }?.map { it.fullName }.toString()
+                if (Utils.hasRole( Role.ROLE_TEACHER)){
+                    val nameStudent = it.idStudent?.let { it1 -> userRepository.findById(it1) }?.map { it.fullName }?.get()
                     it.copy(
                         subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()),
                         nameStudent = nameStudent ?: ""
