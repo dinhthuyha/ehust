@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service
 @Service
 class SubjectService( private val subjectRepository: SubjectRepository) {
 
-    fun findAllUserInClass(semester: Int, nameCourse: String, role: Role): ResponseEntity<List<User>> {
+    fun findAllUserInClass( nameCourse: String, role: Role): ResponseEntity<List<User>> {
         var users = mutableListOf<User>()
         return subjectRepository.findAllUserInClass(nameCourse).map { sub ->
             if (role == Role.ROLE_TEACHER) {
@@ -24,7 +24,8 @@ class SubjectService( private val subjectRepository: SubjectRepository) {
                     }
                 }
             }else if (role == Role.ROLE_STUDENT){
-                sub.listClass?.filter { it.semester == semester }?.forEach { itemClass ->
+                val semesterCurrent = sub.listClass?.maxOf { it.semester!! }
+                sub.listClass?.filter { it.semester == semesterCurrent }?.forEach { itemClass ->
                     itemClass.likes?.toList()?.filter { it.role == role }?.forEach {
                         users.add(User(
                             id = it.id,

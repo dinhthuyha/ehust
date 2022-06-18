@@ -17,7 +17,7 @@ class SubjectController( private val subjectService: SubjectService) {
      *
      */
     @RolesAllowed(Role.ADMIN)
-    @GetMapping("project/users/{semester}/{nameCourse}/{role}")
-    fun findAllUserInClass(@PathVariable(value = "semester") semester: Int, @PathVariable(value = "nameCourse") nameCourse: String, @PathVariable(value = "role") role: Role) =
-        subjectService.findAllUserInClass(semester, nameCourse, role)
+    @GetMapping("project/users/{nameCourse}/{role}")
+    fun findAllUserInClass(@PathVariable(value = "nameCourse") nameCourse: String, @PathVariable(value = "role") role: Role) =
+        subjectService.findAllUserInClass( nameCourse, role)
 }

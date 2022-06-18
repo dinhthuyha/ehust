@@ -53,24 +53,21 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
     }
 
 
-    fun findAllProjectCurrentSemester(): ResponseEntity<List<ClassStudent?>> {
-        val newProjects = mutableListOf<ClassStudent>()
+    fun findAllProjectCurrentSemester(): ResponseEntity<List<Subject?>> {
+        val newProjects = mutableListOf<Subject>()
         val projects = classStudentRepository.findAll()
         val semesterCurrent = projects.maxOf { it.semester!! }
         projects.filter { it.subjectClass?.isProject ==true && it?.semester == semesterCurrent }.forEach {
 
             newProjects.add(
-                ClassStudent(
-                    codeClass = it.codeClass,
-                    subjectClass = Subject(
+                     Subject(
                         it.subjectClass?.id!!,
                         it.subjectClass?.name!!
                     )
                 )
-            )
         }
 
-        return ResponseEntity.ok(newProjects.distinct())
+        return ResponseEntity.ok(newProjects.distinctBy { it.name })
     }
 
 

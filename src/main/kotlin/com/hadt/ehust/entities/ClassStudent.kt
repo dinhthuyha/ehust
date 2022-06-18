@@ -21,7 +21,7 @@ class ClassStudent (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "code_class")
-    val codeClass: Int,
+    val codeClass: Int? = null,
 
     @Column(name = "name_teacher")
     var nameTeacher:String? = null,
@@ -61,7 +61,7 @@ class ClassStudent (
 )
 
 fun ClassStudent.copy(
-    codeClass: Int = this.codeClass,
+    codeClass: Int? = this.codeClass,
     nameTeacher:String? = this.nameTeacher,
     startTime: LocalTime? = this.startTime,
     finishTime: LocalTime? = this.finishTime,
