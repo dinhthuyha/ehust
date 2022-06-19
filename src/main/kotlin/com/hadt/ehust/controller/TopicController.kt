@@ -20,7 +20,7 @@ class TopicController(
     @PutMapping("updatetopic/{id_topic}")
     fun updateTopicStatus(@PathVariable(value = "id_topic") idTopic: Int,
                           @RequestParam(value = "status") status: StatusTopic,
-                          @RequestParam(value = "id_student", defaultValue = "0") idStudent: Int,
+                          @RequestParam(value = "id_student") idStudent: Int,
                          )=
         topicService.updateTopicStatus( idTopic, status, idStudent)
 

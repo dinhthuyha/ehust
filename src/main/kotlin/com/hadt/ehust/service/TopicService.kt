@@ -20,10 +20,10 @@ class TopicService(
     private val userRepository: UserRepository
 ) {
 
-    fun updateTopicStatus(idTopic: Int, status: StatusTopic, idStudent: Int): ResponseEntity<Unit> {
+    fun updateTopicStatus(idTopic: Int, status: StatusTopic, idStudent: Int): ResponseEntity<HttpStatus> {
 
         topicRepository.findById(idTopic).map {
-            if (idStudent != 0) {
+            if (idStudent == 0) {
                 it.copy(status = status).let {
                     topicRepository.save(it)
                 }
@@ -34,7 +34,7 @@ class TopicService(
             }
 
         }
-        return ResponseEntity<Unit>(HttpStatus.OK)
+        return ResponseEntity.ok(HttpStatus.OK)
     }
 
     fun findTopicByNameProjectAndIdTeacher(nameTeacher: String, idProject: String, idTeacher: Int): ResponseEntity<List<Topic>>? {
