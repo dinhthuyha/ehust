@@ -138,8 +138,8 @@ class UserService(
                             }
                     }
                     false -> {
-                        user.userSubjects?.filter { it.isProject == true }?.forEach {
-                            it.listClass?.forEach { classStu ->
+                            user.likedClasses?.filter { it.subjectClass?.isProject == true }?.forEach { classStu ->
+
                                 projects.add(
                                     Project(
                                         codeClass = classStu.codeClass,
@@ -150,7 +150,7 @@ class UserService(
                                     )
                                 )
                             }
-                        }
+
                         projects.sortByDescending { it.semester }
                     }
 

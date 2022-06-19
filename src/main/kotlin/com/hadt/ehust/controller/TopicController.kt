@@ -27,9 +27,10 @@ class TopicController(
     /**
      * xem ds topic theo (id_gv, ten do an)
      */
-    @GetMapping("topic/teacher/{id_teacher}/{id_project}")
+    @GetMapping("topic/teacher/{id_teacher}/{name_teacher}/{id_project}")
     fun findTopicByNameProjectAndIdTeacher(
-        @PathVariable(value = "id_teacher") idTeacher: Int,
-        @PathVariable(value = "id_project") idProject: String
-    ) = topicService.findTopicByNameProjectAndIdTeacher(idTeacher, idProject)
+        @PathVariable(value = "name_teacher") nameTeacher: String,
+        @PathVariable(value = "id_project") idProject: String,
+        @PathVariable(value = "id_teacher") idTeacher: Int
+    ) = topicService.findTopicByNameProjectAndIdTeacher(nameTeacher, idProject, idTeacher)
 }

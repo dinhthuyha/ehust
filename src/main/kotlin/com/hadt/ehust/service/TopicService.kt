@@ -15,18 +15,19 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
-class TopicService(private val topicRepository: TopicRepository,
-                   private val userRepository: UserRepository
-                   ) {
+class TopicService(
+    private val topicRepository: TopicRepository,
+    private val userRepository: UserRepository
+) {
 
     fun updateTopicStatus(idTopic: Int, status: StatusTopic, idStudent: Int): ResponseEntity<Unit> {
 
-        topicRepository.findById(idTopic).map{
-            if (idStudent !=0){
+        topicRepository.findById(idTopic).map {
+            if (idStudent != 0) {
                 it.copy(status = status).let {
                     topicRepository.save(it)
                 }
-            }else{
+            } else {
                 it.copy(status = status, idStudent = idStudent).let {
                     topicRepository.save(it)
                 }
@@ -36,26 +37,36 @@ class TopicService(private val topicRepository: TopicRepository,
         return ResponseEntity<Unit>(HttpStatus.OK)
     }
 
-    fun findTopicByNameProjectAndIdTeacher(idTeacher: Int, idProject: String): ResponseEntity<List<Topic>>? {
-
-        val topics = topicRepository.findByIdTeacher(idTeacher)?.filter { it.subject?.id == idProject }
-            ?.map {
-
-                if (Utils.hasRole( Role.ROLE_TEACHER)){
-                    val nameStudent = it.idStudent?.let { it1 -> userRepository.findById(it1) }?.map { it.fullName }?.get()
-                    it.copy(
-                        subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()),
-                        nameStudent = nameStudent ?: ""
-                    )
-                }else{
-                    it.copy(
-                        subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()),
-                    )
-                }
-
+    fun findTopicByNameProjectAndIdTeacher(nameTeacher: String, idProject: String, idTeacher: Int): ResponseEntity<List<Topic>>? {
+        var mIdTeacher: Int? = idTeacher
+        when(Utils.hasRole(Role.ROLE_TEACHER)){
+            true -> {}
+            false -> {
+                mIdTeacher = userRepository.findByFullName(nameTeacher)?.id
             }
+        }
+        mIdTeacher?.let {
+            val topics = topicRepository.findByIdTeacher(it)?.filter { it.subject?.id == idProject }
+                ?.map {
 
+                    if (Utils.hasRole(Role.ROLE_TEACHER)) {
+                        val nameStudent =
+                            it.idStudent?.let { it1 -> userRepository.findById(it1) }?.map { it.fullName }?.get()
+                        it.copy(
+                            subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()),
+                            nameStudent = nameStudent ?: ""
+                        )
+                    } else {
+                        it.copy(
+                            subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()),
+                        )
+                    }
 
-        return ResponseEntity.ok().body(topics)
+                }
+            return ResponseEntity.ok().body(topics)
+        }
+
+        return ResponseEntity.notFound().build()
+
     }
 }
