@@ -13,17 +13,17 @@ import javax.persistence.*
     property = "id"
 )
 class PairingTeacherWithStudent(
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Int,
-    @OneToOne(cascade=[CascadeType.ALL])
-    @JoinColumn(name = "id_student")
-    @JsonIgnore
-    val idStudent : User,
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null,
 
-    @OneToOne(cascade=[CascadeType.ALL])
-    @JoinColumn(name = "id_teacher")
+    @Column(name = "id_student")
+    val idStudent : Int,
 
-    val idTeacher : User
+    @Column(name = "id_teacher")
+    val idTeacher : Int,
+
+    @Column(name = "name_project")
+    val nameProject: String
 
     //todo: can co id_class
 )

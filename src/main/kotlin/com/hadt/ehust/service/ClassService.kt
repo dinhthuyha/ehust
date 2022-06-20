@@ -1,6 +1,7 @@
 package com.hadt.ehust.service
 
 import com.hadt.ehust.entities.ClassStudent
+import com.hadt.ehust.entities.Subject
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.repository.ClassStudentRepository
 
@@ -12,14 +13,15 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
     fun findById(id: Int): ResponseEntity<ClassStudent> {
         return classStudentRepository.findById(id).map {
             ResponseEntity.ok(
-                ClassStudent(
-                    codeClass = it.codeClass,
-                    codeCourse = it.codeCourse,
-                    nameCourse = it.nameCourse,
-                    semester = it.semester,
-                    nameTeacher = it.nameTeacher ?: "",
-                    studyForm = it.studyForm
-                )
+               ClassStudent(
+                   codeClass = it.codeClass,
+                   semester = it.semester,
+                   studyForm = it.studyForm,
+                   subjectClass = Subject(
+                       it.subjectClass?.id!!,
+                       it.subjectClass?.name!!
+                   )
+               )
             )
         }.orElse(ResponseEntity.notFound().build())
     }
@@ -50,45 +52,25 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    /**
-     * return list project in current semester
-     */
-    fun findAllProjectCurrentSemester(): ResponseEntity<List<ClassStudent?>> {
-        val newProjects = mutableListOf<ClassStudent>()
+
+    fun findAllProjectCurrentSemester(): ResponseEntity<List<Subject?>> {
+        val newProjects = mutableListOf<Subject>()
         val projects = classStudentRepository.findAll()
         val semesterCurrent = projects.maxOf { it.semester!! }
-        projects.filter { it.semester == semesterCurrent }.forEach {
+        projects.filter { it.subjectClass?.isProject ==true && it?.semester == semesterCurrent }.forEach {
+
             newProjects.add(
-                ClassStudent(
-                    codeClass = it.codeClass,
-                    nameCourse = it.nameCourse,
-                    semester = it.semester
+                     Subject(
+                        it.subjectClass?.id!!,
+                        it.subjectClass?.name!!
+                    )
                 )
-            )
         }
 
-        return ResponseEntity.ok(newProjects.distinct())
+        return ResponseEntity.ok(newProjects.distinctBy { it.name })
     }
 
-    /**
-     * find all user in class ( semester, name) with student
-     */
-    fun findAllUserInClass(semester: Int, nameCourse: String): ResponseEntity<List<User>> {
-        val users = mutableListOf<User>()
-        return classStudentRepository.findAllUserInClass(semester, nameCourse).map { listClass ->
-            listClass.forEach { item ->
-                item.likes?.toList()?.forEach {
-                    users.add(
-                        User(
-                            id = it.id,
-                            fullName = it.fullName
-                        )
-                    )
-                }
-            }
-            ResponseEntity.ok(users.toList())
-        }.orElse(ResponseEntity.notFound().build())
-    }
+
 
 
 }

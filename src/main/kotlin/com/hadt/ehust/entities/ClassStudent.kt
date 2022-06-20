@@ -21,21 +21,10 @@ class ClassStudent (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "code_class")
-    val codeClass: Int,
-
-    @Column(name = "code_course")
-    val codeCourse: String? = null,
-
-    @Column(name = "name_course")
-    val nameCourse:String? = null,
+    val codeClass: Int? = null,
 
     @Column(name = "name_teacher")
-    val nameTeacher:String? = null,
-
-    @Column(name = "is_project_subject")
-    var isProjectSubject: Boolean? = null,
-
-    val semester: Int? = null,
+    var nameTeacher:String? = null,
 
     @Column(name = "start_time")
    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
@@ -56,12 +45,39 @@ class ClassStudent (
 
     @Column(name = "study_form")
     val studyForm: String? = null,
+    val semester: Int? = null,
 
     @ManyToMany(mappedBy = "likedClasses")
-
     val likes: Set<User>? = null,
 
 
-    @OneToMany(mappedBy = "mClass")
-    val tasks: Set<Task>? = null
+    @ManyToOne
+    @JoinColumn(name = "id_subject")
+    val subjectClass: Subject? = null
+)
+
+fun ClassStudent.copy(
+    codeClass: Int? = this.codeClass,
+    nameTeacher:String? = this.nameTeacher,
+    startTime: LocalTime? = this.startTime,
+    finishTime: LocalTime? = this.finishTime,
+    dateStudy:String? = this.dateStudy,
+    dateFinishCourse: LocalDate? = this.dateFinishCourse,
+    dateStartCourse: LocalDate? = this.dateStartCourse,
+    studyForm: String? = this.studyForm,
+    semester: Int? = this.semester,
+    likes: Set<User>? = this.likes,
+    subjectClass: Subject? = this.subjectClass
+) = ClassStudent(
+    codeClass,
+    nameTeacher,
+    startTime,
+    finishTime,
+    dateStudy,
+    dateFinishCourse,
+    dateStartCourse,
+    studyForm,
+    semester,
+    likes,
+    subjectClass
 )

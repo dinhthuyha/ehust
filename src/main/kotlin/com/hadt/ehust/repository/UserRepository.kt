@@ -16,4 +16,6 @@ interface UserRepository: JpaRepository<User,Int>{
     @Query(value = "SELECT * FROM user u WHERE u.full_name =:fullName", nativeQuery = true)
     fun findUserByFullName(@Param("fullName") fullName:String): Optional<User>
 
+    fun findByFullName(fullName: String): User?
+
 }

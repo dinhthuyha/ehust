@@ -18,7 +18,7 @@ import javax.persistence.*
 )
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 @JsonInclude(JsonInclude.Include.NON_NULL)
-class User(
+data class User(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
@@ -54,16 +54,13 @@ class User(
     val likedClasses: Set<ClassStudent>?=null,
 
     @ManyToMany
+    @JoinTable(name = "user_subject", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_subject")] )
+    val userSubjects: Set<Subject>?=null,
+
+    @ManyToMany
     @JoinTable(name = "user_task", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_task")] )
     val likedTasks: Set<Task>?=null,
 
-    @OneToMany(mappedBy = "user")
-    val comments: Set<Comments>?=null,
-
-    @OneToOne(mappedBy = "idStudent")
-    val pairingStudent: PairingTeacherWithStudent?=null,
-    @OneToOne(mappedBy = "idTeacher")
-    val pairingTeacher: PairingTeacherWithStudent?= null,
 
 
     )
