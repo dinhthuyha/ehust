@@ -51,10 +51,6 @@ class ClassStudent (
     val likes: Set<User>? = null,
 
 
-
-    @OneToMany(mappedBy = "mClass")
-    val tasks: Set<Task>? = null,
-
     @ManyToOne
     @JoinColumn(name = "id_subject")
     val subjectClass: Subject? = null
@@ -71,7 +67,6 @@ fun ClassStudent.copy(
     studyForm: String? = this.studyForm,
     semester: Int? = this.semester,
     likes: Set<User>? = this.likes,
-    tasks: Set<Task>? = this.tasks,
     subjectClass: Subject? = this.subjectClass
 ) = ClassStudent(
     codeClass,
@@ -84,6 +79,5 @@ fun ClassStudent.copy(
     studyForm,
     semester,
     likes,
-    tasks,
     subjectClass
 )

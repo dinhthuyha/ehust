@@ -61,7 +61,6 @@ data class User(
     @JoinTable(name = "user_task", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_task")] )
     val likedTasks: Set<Task>?=null,
 
-    @OneToMany(mappedBy = "user")
-    val comments: Set<Comments>?=null
+
 
     )

@@ -22,8 +22,5 @@ class Comments(
     @JsonIgnore
     val task:Task,
 
-    @ManyToOne
-    @JoinColumn(name = "id_user")
-    val user: User,
     val content: String
 )

@@ -38,8 +38,12 @@ class Topic(
 
     @ManyToOne
     @JoinColumn(name = "id_subject")
-    val subject: Subject? = null
-)
+    val subject: Subject? = null,
+
+    @OneToMany(mappedBy = "topics")
+    val listClass: Set<Task>? = null,
+
+    )
 
 fun Topic.copy(
     id: Int = this.id,
