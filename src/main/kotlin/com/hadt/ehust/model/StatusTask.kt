@@ -1,11 +1,16 @@
 package com.hadt.ehust.model
 
+import com.fasterxml.jackson.annotation.JsonValue
+
 enum class StatusTask {
-    NEW, IN_PROGRESS, FINISHED, DONE, CANCEL;
-    companion object {
-        const val ADMIN = "ADMIN"
-        const val TEACHER = "TEACHER"
-        const val STUDENT = "STUDENT"
-        const val UNKNOWN = "UNKNOWN"
+    NEW, IN_PROGRESS, FINISHED, CANCEL;
+
+    @JsonValue
+    fun toJson() = when(this) {
+        NEW -> "New"
+        IN_PROGRESS -> "In progress"
+        FINISHED -> "Finished"
+        CANCEL -> "Canceled"
     }
+
 }

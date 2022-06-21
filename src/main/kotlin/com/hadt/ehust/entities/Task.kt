@@ -15,7 +15,7 @@ import javax.persistence.*
     generator = ObjectIdGenerators.PropertyGenerator::class,
     property = "id"
 )
-data class Task(
+class Task(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
@@ -41,14 +41,16 @@ data class Task(
 
     val progress: Float? = 0f,
 
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "id_topic")
     val topics: Topic? = null,
 
+    @JsonIgnore
     @OneToMany(mappedBy = "task")
     val commentsTask: Set<Comments>? = null,
 
-
+    @JsonIgnore
     @ManyToMany(mappedBy = "likedTasks")
     val likes: Set<User>? = null,
 )
