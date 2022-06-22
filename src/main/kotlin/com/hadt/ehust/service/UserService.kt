@@ -164,9 +164,12 @@ class UserService(
     private fun getTeacherAssignedUser(nameCourse: String?, idStudent: Int): String{
         var nameTeacher = ""
         pairingRepository.findUserByIdStudentAndNameProject(idStudent, nameCourse).map { pair ->
-            userRepository.findById(pair.idTeacher).map {
-                nameTeacher = it.fullName
+            pair?.let {
+                userRepository.findById(it.idTeacher).map {
+                    nameTeacher = it.fullName
+                }
             }
+
         }
         return nameTeacher
     }
