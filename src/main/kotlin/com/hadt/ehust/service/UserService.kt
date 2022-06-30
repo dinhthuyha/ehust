@@ -119,7 +119,7 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findAllProjectsByIdStudent(id: Int): ResponseEntity<List<Project>> {
+    fun findAllProjectsById(id: Int): ResponseEntity<List<Project>> {
         val projects = mutableListOf<Project>()
 
       return  userRepository.findById(id).map { user ->

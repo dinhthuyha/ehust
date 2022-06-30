@@ -1,9 +1,8 @@
 package com.hadt.ehust.entities
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.hadt.ehust.model.StatusTask
 import java.time.LocalDate
 import java.util.*
@@ -15,6 +14,8 @@ import javax.persistence.*
     generator = ObjectIdGenerators.PropertyGenerator::class,
     property = "id"
 )
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class Task(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -40,6 +41,7 @@ class Task(
     val dueDate: LocalDate,
 
     val progress: Float? = 0f,
+    val assignee: String? = null,
 
     @JsonIgnore
     @ManyToOne

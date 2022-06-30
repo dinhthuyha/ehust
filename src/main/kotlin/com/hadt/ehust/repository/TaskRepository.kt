@@ -11,4 +11,5 @@ import java.util.*
 interface TaskRepository: JpaRepository<Task, Int> {
     @Query(value = "select * from task where task.id_topic = :id_topic", nativeQuery = true)
     fun findByIdTopic(@Param("id_topic") idTopic: Int): Optional<List<Task>>
+
 }

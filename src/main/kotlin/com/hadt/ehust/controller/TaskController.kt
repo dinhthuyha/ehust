@@ -25,4 +25,7 @@ class TaskController( private val taskService: TaskService) {
     @PostMapping("newTask")
     fun newTask(@RequestParam("task") task: Task) =
         taskService.newTask(task)
+
+    @GetMapping("task/{id}")
+    fun findByIdTask(@PathVariable("id") id: Int)= taskService.findByIdTask(id)
 }

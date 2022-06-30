@@ -26,4 +26,12 @@ class TaskService(private val taskRepository: TaskRepository) {
         taskRepository.save(task)
         return ResponseEntity.ok(HttpStatus.OK)
     }
+
+    fun findByIdTask(id: Int): ResponseEntity<Task> {
+       return taskRepository.findById(id).map {
+             ResponseEntity.ok().body(it)
+        }.orElse(ResponseEntity.notFound().build())
+    }
+
+
 }
