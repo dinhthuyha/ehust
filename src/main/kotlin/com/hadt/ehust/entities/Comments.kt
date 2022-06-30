@@ -22,5 +22,9 @@ class Comments(
     @JsonIgnore
     val task:Task,
 
-    val content: String
+    val isUserPost: Int,
+    val content: String,
+
+    @Transient
+    val nameUserPost: String
 )
