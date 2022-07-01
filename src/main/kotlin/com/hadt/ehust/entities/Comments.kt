@@ -16,7 +16,7 @@ class Comments(
     @ManyToOne
     @JoinColumn(name ="id_task" )
     @JsonIgnore
-    val task:Task? = null,
+    var task:Task? = null,
 
     var idUser: Int,
     val content: String,

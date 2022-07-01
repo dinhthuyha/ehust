@@ -18,8 +18,8 @@ class CommentController( private val commentService: CommentService) {
     @GetMapping("comments/{id_task}")
     fun findAllCommentByIdTask(@PathVariable("id_task") idTask: Int) = commentService.findAllCommentByIdTask(idTask)
 
-    @PostMapping("postComment")
-    fun postComment(@RequestBody comment: Comments) = commentService.postComment(comment)
+    @PostMapping("comments/{id_task}")
+    fun postComment(@RequestBody comment: Comments, @PathVariable("id_task") idTask: Int) = commentService.postComment(idTask, comment)
 
     @DeleteMapping("deleteComment")
     fun deleteCommentById(@PathVariable("id") id: Int) = commentService.deleteComment(id)

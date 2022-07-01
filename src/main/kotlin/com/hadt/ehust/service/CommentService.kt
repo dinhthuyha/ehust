@@ -3,14 +3,20 @@ package com.hadt.ehust.service
 import com.hadt.ehust.entities.Comments
 import com.hadt.ehust.entities.Task
 import com.hadt.ehust.repository.CommentRepository
+import com.hadt.ehust.repository.TaskRepository
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.utils.Utils
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
-class CommentService(private val commentRepository: CommentRepository, private val userRepository: UserRepository) {
+class CommentService(
+    private val commentRepository: CommentRepository,
+    private val userRepository: UserRepository,
+    private val taskRepository: TaskRepository
+) {
 
     fun findAllCommentByIdTask(idTask: Int): ResponseEntity<List<Comments>> {
         var comments = mutableListOf<Comments>()
@@ -29,11 +35,11 @@ class CommentService(private val commentRepository: CommentRepository, private v
         }
     }
 
-    fun postComment(cmt: Comments): ResponseEntity<List<Comments>> {
+    fun postComment(idTask: Int, cmt: Comments): ResponseEntity<List<Comments>> {
         cmt.idUser = Utils.getCurrentUserId()
+        cmt.task = taskRepository.findByIdOrNull(idTask)
         commentRepository.save(cmt)
-        return ResponseEntity.ok().body(commentRepository.findByIdTask(cmt.task?.id?:0))
-
+        return findAllCommentByIdTask(idTask)
     }
 
     fun deleteComment(cmtId: Int): ResponseEntity<HttpStatus> {
