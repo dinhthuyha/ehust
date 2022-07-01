@@ -1,30 +1,26 @@
 package com.hadt.ehust.entities
 
-import com.fasterxml.jackson.annotation.JsonIdentityInfo
-import com.fasterxml.jackson.annotation.JsonIgnore
-import com.fasterxml.jackson.annotation.JsonProperty
-import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import com.fasterxml.jackson.annotation.*
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import javax.persistence.*
 
 @Entity
 @Table(name = "comments")
-@JsonIdentityInfo(
-    generator = ObjectIdGenerators.PropertyGenerator::class,
-    property = "id"
-)
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
+@JsonInclude(JsonInclude.Include.NON_NULL)
 class Comments(
     @Id
-
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Int,
+    val id: Int? = null,
     @ManyToOne
     @JoinColumn(name ="id_task" )
     @JsonIgnore
-    val task:Task,
+    val task:Task? = null,
 
-    val isUserPost: Int,
+    var idUser: Int,
     val content: String,
 
     @Transient
-    val nameUserPost: String
+    var nameUserPost: String? = null
 )

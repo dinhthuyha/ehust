@@ -10,4 +10,9 @@ object Utils {
             .map { it.authority }
             .any { it == role.name }
     }
+
+    fun getCurrentUserId(): Int {
+        val id = SecurityContextHolder.getContext().authentication.principal as String
+        return id.toInt()
+    }
 }

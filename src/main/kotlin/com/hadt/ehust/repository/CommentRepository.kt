@@ -10,5 +10,5 @@ import java.util.Optional
 interface CommentRepository: JpaRepository<Comments, Int> {
 
     @Query(value = "select * from comments c where c.id_task = :id_task", nativeQuery = true)
-    fun findByIdTask(@Param("id_task")idTask: Int): Optional<List<Comments>>
+    fun findByIdTask(@Param("id_task")idTask: Int): List<Comments>
 }
