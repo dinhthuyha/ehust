@@ -20,12 +20,12 @@ class Task(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
-    val id: Int,
+    val id: Int? = null,
 
-    val title: String,
+    val title: String? = null,
 
     @Enumerated(EnumType.ORDINAL)
-    val status: StatusTask,
+    val status: StatusTask? = null,
     val description: String? = null,
 
     @Column(name = "estimate_time")
@@ -35,10 +35,10 @@ class Task(
     val spendTime: Int? = null,
 
     @Column(name = "start_date")
-    val startDate: LocalDate,
+    val startDate: LocalDate? = null,
 
     @Column(name = "due_date")
-    val dueDate: LocalDate,
+    val dueDate: LocalDate? = null,
 
     val progress: Float? = 0f,
     val assignee: String? = null,
@@ -55,4 +55,34 @@ class Task(
     @JsonIgnore
     @ManyToMany(mappedBy = "likedTasks")
     val likes: Set<User>? = null,
+)
+
+fun Task.copy(
+     id: Int? = this.id,
+     title: String? = this.title,
+     status: StatusTask? = this.status,
+     description: String? = this.description,
+     estimateTime: Int? = this.estimateTime,
+     spendTime: Int? = this.spendTime,
+     startDate: LocalDate? = this.startDate,
+     dueDate: LocalDate? = this.dueDate,
+     progress: Float? = this.progress,
+     assignee: String? = this.assignee,
+     topics: Topic? = this.topics,
+     commentsTask: Set<Comments>? = this.commentsTask,
+     likes: Set<User>? = this.likes,
+) = Task(
+    id,
+    title,
+    status,
+    description,
+    estimateTime,
+    spendTime,
+    startDate,
+    dueDate,
+    progress,
+    assignee,
+    topics,
+    commentsTask,
+    likes
 )
