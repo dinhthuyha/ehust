@@ -5,19 +5,21 @@ import com.hadt.ehust.entities.Topic
 import com.hadt.ehust.entities.copy
 import com.hadt.ehust.model.Role
 import com.hadt.ehust.model.StatusTopic
+import com.hadt.ehust.repository.SubjectRepository
 import com.hadt.ehust.repository.TopicRepository
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.utils.Utils
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
+import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.stereotype.Service
 
 @Service
 class TopicService(
     private val topicRepository: TopicRepository,
-    private val userRepository: UserRepository
+    private val userRepository: UserRepository,
+    private val subjectRepository: SubjectRepository
 ) {
 
     fun updateTopicStatus(idTopic: Int, status: StatusTopic, idStudent: Int): ResponseEntity<HttpStatus> {
@@ -37,9 +39,13 @@ class TopicService(
         return ResponseEntity.ok(HttpStatus.OK)
     }
 
-    fun findTopicByNameProjectAndIdTeacher(nameTeacher: String, idProject: String, idTeacher: Int): ResponseEntity<List<Topic>>? {
+    fun findTopicByNameProjectAndIdTeacher(
+        nameTeacher: String,
+        idProject: String,
+        idTeacher: Int
+    ): ResponseEntity<List<Topic>>? {
         var mIdTeacher: Int? = idTeacher
-        when(Utils.hasRole(Role.ROLE_TEACHER)){
+        when (Utils.hasRole(Role.ROLE_TEACHER)) {
             true -> {}
             false -> {
                 mIdTeacher = userRepository.findByFullName(nameTeacher)?.id
@@ -68,5 +74,20 @@ class TopicService(
 
         return ResponseEntity.notFound().build()
 
+    }
+
+    fun addTopicSuggestion(topicName: String?, nameTeacher: String?, idSubject: String): ResponseEntity<*> {
+        val subject = subjectRepository.findByIdOrNull(idSubject) ?: throw NotFoundException()
+        val teacher = userRepository.findByFullName(nameTeacher ?: "") ?: throw NotFoundException()
+        val studentId = Utils.getCurrentUserId()
+        val topic = Topic(
+            idStudent = studentId,
+            name = topicName ?: "",
+            idTeacher = teacher.id,
+            subject = subject,
+            status = StatusTopic.REQUESTING
+        )
+        topicRepository.save(topic)
+        return ResponseEntity.ok(null)
     }
 }

@@ -19,7 +19,7 @@ import javax.persistence.*
 class Topic(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Int,
+    val id: Int? = null,
     val name: String,
     @Column(name = "id_student")
     val idStudent: Int? = null,
@@ -46,7 +46,7 @@ class Topic(
     )
 
 fun Topic.copy(
-    id: Int = this.id,
+    id: Int? = this.id,
     name: String = this.name,
     idStudent: Int? = this.idStudent,
     idTeacher: Int? = this.idTeacher,
