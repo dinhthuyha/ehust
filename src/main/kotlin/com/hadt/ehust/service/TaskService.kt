@@ -1,15 +1,20 @@
 package com.hadt.ehust.service
 
+import com.hadt.ehust.entities.Attachment
 import com.hadt.ehust.entities.Task
-import com.hadt.ehust.entities.Topic
 import com.hadt.ehust.entities.copy
+import com.hadt.ehust.repository.AttachmentRepository
 import com.hadt.ehust.repository.TaskRepository
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
 @Service
-class TaskService(private val taskRepository: TaskRepository) {
+class TaskService(
+    private val taskRepository: TaskRepository,
+    private val attachmentRepository: AttachmentRepository
+) {
 
     fun findAllTaskByIdTopic(idTopic: Int): ResponseEntity<List<Task>> {
         return taskRepository.findByIdTopic(idTopic)
@@ -53,6 +58,17 @@ class TaskService(private val taskRepository: TaskRepository) {
         return taskRepository.findById(id).map {
             ResponseEntity.ok().body(it)
         }.orElse(ResponseEntity.notFound().build())
+    }
+
+    fun addAttachment(idTask: Int, attachment: Attachment): List<Attachment> {
+        val task = taskRepository.findByIdOrNull(idTask)
+        attachment.task = task
+        attachmentRepository.save(attachment)
+        return attachmentRepository.findByIdTask(idTask)
+    }
+
+    fun findAllAttachment(id: Int): List<Attachment> {
+        return attachmentRepository.findByIdTask(id)
     }
 
 
