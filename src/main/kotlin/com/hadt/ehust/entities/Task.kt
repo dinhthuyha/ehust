@@ -54,7 +54,7 @@ class Task(
 
     @JsonIgnore
     @OneToMany(mappedBy = "task")
-    var attachments: Set<Attachment>,
+    val attachments: Set<Attachment> = emptySet(),
 
     @JsonIgnore
     @ManyToMany(mappedBy = "likedTasks")

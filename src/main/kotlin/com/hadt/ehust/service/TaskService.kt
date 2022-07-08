@@ -3,8 +3,10 @@ package com.hadt.ehust.service
 import com.hadt.ehust.entities.Attachment
 import com.hadt.ehust.entities.Task
 import com.hadt.ehust.entities.copy
+import com.hadt.ehust.model.StatusTask
 import com.hadt.ehust.repository.AttachmentRepository
 import com.hadt.ehust.repository.TaskRepository
+import com.hadt.ehust.repository.TopicRepository
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service
 
 @Service
 class TaskService(
+    private val topicRepository: TopicRepository,
     private val taskRepository: TaskRepository,
     private val attachmentRepository: AttachmentRepository
 ) {
@@ -23,13 +26,17 @@ class TaskService(
             }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun newTask(task: Task): ResponseEntity<HttpStatus> {
-        taskRepository.save(task)
-        return ResponseEntity.ok(HttpStatus.OK)
+    fun newTask(topicId: Int, task: Task): ResponseEntity<Any> {
+        return topicRepository.findByIdOrNull(topicId)?.let {
+            taskRepository.save(task.copy(id = null, topics = it, status = StatusTask.NEW)).id
+        }?.let {
+            ResponseEntity.ok(it)
+        } ?: ResponseEntity.internalServerError().build()
     }
 
     fun updateTask(task: Task): ResponseEntity<HttpStatus> {
-        return taskRepository.findById(task.id!!).map {
+        return taskRepository.findByIdOrNull(task.id!!)?.let {
+            val title = task.title ?: it.title
             val des = task.description ?: it.description
             val startDate = task.startDate ?: it.startDate
             val dueDate = task.dueDate ?: it.dueDate
@@ -37,7 +44,9 @@ class TaskService(
             val estimateTime = task.estimateTime ?: it.estimateTime
             val spendTime = task.spendTime ?: it.spendTime
             val assignee = task.assignee ?: it.assignee
-            it.copy(
+
+            val t = it.copy(
+                title = title,
                 description = des,
                 startDate = startDate,
                 dueDate = dueDate,
@@ -45,13 +54,10 @@ class TaskService(
                 estimateTime = estimateTime,
                 spendTime = spendTime,
                 assignee = assignee
-            ).let {
-                taskRepository.save(it)
-            }
+            ).let(taskRepository::save)
 
              ResponseEntity.ok(HttpStatus.OK)
-        }.orElse(ResponseEntity.notFound().build())
-
+        } ?: ResponseEntity.notFound().build()
     }
 
     fun findByIdTask(id: Int): ResponseEntity<Task> {

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.PutMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
@@ -25,9 +24,9 @@ class TaskController( private val taskService: TaskService) {
     fun updateTask(@RequestBody task: Task)=
         taskService.updateTask(task)
 
-    @PostMapping("newTask")
-    fun newTask(@RequestParam("task") task: Task) =
-        taskService.newTask(task)
+    @PostMapping("topic/{topic_id}/task")
+    fun newTask(@PathVariable("topic_id") topicId: Int, @RequestBody task: Task) =
+        taskService.newTask(topicId, task)
 
     @GetMapping("task/{id}")
     fun findByIdTask(@PathVariable("id") id: Int)= taskService.findByIdTask(id)
