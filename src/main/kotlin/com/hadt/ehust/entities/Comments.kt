@@ -3,6 +3,8 @@ package com.hadt.ehust.entities
 import com.fasterxml.jackson.annotation.*
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import java.security.Timestamp
+import java.time.LocalDateTime
 import javax.persistence.*
 
 @Entity
@@ -20,6 +22,9 @@ class Comments(
 
     var idUser: Int,
     val content: String,
+
+    @Column(name = "timestamp", columnDefinition = "TIMESTAMP")
+    val timestamp: LocalDateTime? = null,
 
     @Transient
     var nameUserPost: String? = null
