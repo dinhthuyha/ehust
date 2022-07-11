@@ -52,24 +52,28 @@ class UserService(
         }.orElse(ResponseEntity.notFound().build())
     }
 
-    fun findUserByFullName(fullName: String): ResponseEntity<User> {
+    fun findUserByFullName(fullName: String, roleId: Role): ResponseEntity<User> {
         return userRepository.findUserByFullName(fullName).map {
-            ResponseEntity.ok(
-                User(
-                    id = it.id,
-                    fullName = it.fullName,
-                    instituteOfManagement = it.instituteOfManagement,
-                    gender = it.gender,
-                    grade = it.grade,
-                    course = it.course,
-                    email = it.email,
-                    cadreStatus = it.cadreStatus ?: "",
-                    unit = it.unit,
-                    role = it.role,
-                    imageAvatar = it.imageAvatar,
-                    imageBackground = it.imageBackground
+            if (it.role == roleId){
+                ResponseEntity.ok(
+                    User(
+                        id = it.id,
+                        fullName = it.fullName,
+                        instituteOfManagement = it.instituteOfManagement,
+                        gender = it.gender,
+                        grade = it.grade,
+                        course = it.course,
+                        email = it.email,
+                        cadreStatus = it.cadreStatus ?: "",
+                        unit = it.unit,
+                        role = it.role,
+                        imageAvatar = it.imageAvatar,
+                        imageBackground = it.imageBackground
+                    )
                 )
-            )
+            }else {
+                ResponseEntity.notFound().build()
+            }
         }.orElse(ResponseEntity.notFound().build())
     }
 

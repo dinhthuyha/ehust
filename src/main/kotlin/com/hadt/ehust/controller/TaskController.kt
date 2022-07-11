@@ -43,4 +43,10 @@ class TaskController( private val taskService: TaskService) {
         val attachments = taskService.addAttachment(id, attachment)
         return ResponseEntity.ok(attachments)
     }
+
+    /**
+     * lít task se het han trong 2 ngay toi.
+     */
+    @GetMapping("task/willexpire")
+    fun findAllTaskWillExpire() = taskService.findAllTaskWillExpire()
 }

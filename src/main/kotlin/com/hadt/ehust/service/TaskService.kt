@@ -4,16 +4,24 @@ import com.hadt.ehust.entities.Attachment
 import com.hadt.ehust.entities.Task
 import com.hadt.ehust.entities.copy
 import com.hadt.ehust.repository.AttachmentRepository
+import com.hadt.ehust.model.StatusTask
+import com.hadt.ehust.model.StatusTopic
 import com.hadt.ehust.repository.TaskRepository
 import org.springframework.data.repository.findByIdOrNull
+import com.hadt.ehust.repository.UserRepository
+import com.hadt.ehust.utils.Utils
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
+import java.time.LocalDate
+import java.time.Period
 
 @Service
 class TaskService(
     private val taskRepository: TaskRepository,
-    private val attachmentRepository: AttachmentRepository
+    private val attachmentRepository: AttachmentRepository,
+    private val userRepository: UserRepository
 ) {
 
     fun findAllTaskByIdTopic(idTopic: Int): ResponseEntity<List<Task>> {
@@ -58,6 +66,53 @@ class TaskService(
         return taskRepository.findById(id).map {
             ResponseEntity.ok().body(it)
         }.orElse(ResponseEntity.notFound().build())
+    }
+
+    fun findAllTaskWillExpire(): ResponseEntity<List<Task>> {
+        var idTopics = getListTopicCurrentSemester()
+        val listTask = mutableListOf<Task>()
+        idTopics.forEach { id ->
+            taskRepository.findAllTaskWillExpire(id)?.let {
+                listTask.addAll(it.filter { it.showTimeRemain()!=null && it.showTimeRemain()!! <3 })
+            }
+        }
+        return if (listTask.isNotEmpty()) ResponseEntity.ok().body(listTask) else ResponseEntity.notFound().build()
+
+    }
+
+    private fun getListTopicCurrentSemester(): List<Int> {
+        var idTopics = mutableListOf<Int>()
+        val idUser = Utils.getCurrentUserId()
+        userRepository.findById(idUser).map { user ->
+            val semester = user.likedClasses?.maxOf { it.semester ?: 0 }
+            user.likedClasses?.let { listClass ->
+                val targetClasses = listClass.filter { it.semester == semester }
+                targetClasses.forEach { cla ->
+                    cla.subjectClass?.let {
+                        if (it.isProject == true) {
+                            it.topics
+                                ?.filter { topic -> topic.status == StatusTopic.ACCEPT && Utils.getCurrentUserId() == topic.idStudent }
+                                ?.map { it.id!! }
+                                ?.let {
+                                    idTopics.addAll(it)
+                                }
+                        }
+                    }
+                }
+            }
+        }
+        return idTopics
+    }
+
+    private fun Task.showTimeRemain(): Int? {
+        if (this.status == StatusTask.IN_PROGRESS) {
+            val today = LocalDate.now()
+            val dueDate = this.dueDate
+            val dateRemain = Period.between(today, dueDate).days
+            return dateRemain
+        }
+
+        return null
     }
 
     fun addAttachment(idTask: Int, attachment: Attachment): List<Attachment> {

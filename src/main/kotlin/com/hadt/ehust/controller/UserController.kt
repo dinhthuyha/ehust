@@ -42,8 +42,8 @@ class UserController(
     /**
      * TODO tim kiem sinh vien theo fullname
      */
-    @GetMapping("/search/user/name/{fullName}")
-    fun findUserByFullName(@PathVariable(value = "fullName") fullName: String) = userService.findUserByFullName(fullName)
+    @GetMapping("/search/user/name/{fullName}/{roleId}")
+    fun findUserByFullName(@PathVariable(value = "fullName") fullName: String, @PathVariable(value = "roleId") roleId: Role) = userService.findUserByFullName(fullName, roleId)
 
     @GetMapping("/search/user/id/{id}/{roleId}")
     fun findUserById(@PathVariable(value = "id") id: Int, @PathVariable(value = "roleId") roleId: Role) = userService.findUserByIdAndRole(id, roleId)
