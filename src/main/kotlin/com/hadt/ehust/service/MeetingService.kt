@@ -13,21 +13,27 @@ import org.springframework.stereotype.Service
 @Service
 class MeetingService(private val meetingRepository: MeetingRepository, private val userRepository: UserRepository) {
 
-    fun postMeeting(meeting: Meeting): ResponseEntity<HttpStatus>{
-        val idStudent = userRepository.findByFullName(meeting.nameStudent)?.id
+    fun postMeeting(meeting: Meeting): ResponseEntity<List<Meeting>>{
+        val idStudent = userRepository.findByFullName(meeting.nameUserStudent)?.id
         var a = meeting
         a.idUserStudent = idStudent
         meetingRepository.save(a)
-        return ResponseEntity.ok().body(HttpStatus.OK)
+        val meetings = mutableListOf<Meeting>()
+        a.idUserStudent?.let { a.idUserTeacher?.let { it1 -> getAllMeeting(it, it1) } }?.let { meetings.addAll(it) }
+        return ResponseEntity.ok().body(meetings)
     }
 
     fun findAllMeeting(idUserStudent: Int , idUserTeacher: Int): ResponseEntity<List<Meeting>>{
         val meetings = mutableListOf<Meeting>()
-        when(Utils.hasRole(Role.ROLE_STUDENT)){
-            true -> {meetings.addAll(meetingRepository.findByIdUserStudent(idUserStudent))}
-
-            false -> { meetings.addAll(meetingRepository.findByIdUserTeacher(idUserTeacher))}
-        }
+       meetings.addAll(getAllMeeting(idUserStudent, idUserTeacher))
        return ResponseEntity.ok().body(meetings)
+    }
+
+    private fun getAllMeeting(idUserStudent: Int , idUserTeacher: Int): List<Meeting>{
+        return  when(Utils.hasRole(Role.ROLE_STUDENT)){
+            true -> {meetingRepository.findByIdUserStudent(idUserStudent)}
+
+            false -> { meetingRepository.findByIdUserTeacher(idUserTeacher)}
+        }
     }
 }

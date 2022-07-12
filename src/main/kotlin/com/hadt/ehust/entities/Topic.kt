@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.hadt.ehust.model.StatusTopic
+import org.apache.tomcat.jni.Local
+import java.time.LocalTime
 import javax.persistence.*
 
 @Entity

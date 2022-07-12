@@ -29,6 +29,6 @@ class Meeting (
     @Column(name = "end_time")
     val endTime: LocalTime,
     @Column( name= "name_user_student")
-    val nameStudent: String,
+    val nameUserStudent: String,
         )
 
