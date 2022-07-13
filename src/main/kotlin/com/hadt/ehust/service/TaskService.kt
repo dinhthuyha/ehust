@@ -35,7 +35,7 @@ class TaskService(
 
     fun newTask(topicId: Int, task: Task): ResponseEntity<Any> {
         return topicRepository.findByIdOrNull(topicId)?.let {
-            taskRepository.save(task.copy(id = null, topics = it, status = StatusTask.NEW)).id
+            taskRepository.save(task.copy(id = null, topics = it)).id
         }?.let {
             ResponseEntity.ok(it)
         } ?: ResponseEntity.internalServerError().build()
@@ -44,6 +44,7 @@ class TaskService(
     fun updateTask(task: Task): ResponseEntity<HttpStatus> {
         return taskRepository.findByIdOrNull(task.id!!)?.let {
             val title = task.title ?: it.title
+            val status = task.status ?: it.status
             val des = task.description ?: it.description
             val startDate = task.startDate ?: it.startDate
             val dueDate = task.dueDate ?: it.dueDate
@@ -54,6 +55,7 @@ class TaskService(
 
             val t = it.copy(
                 title = title,
+                status = status,
                 description = des,
                 startDate = startDate,
                 dueDate = dueDate,

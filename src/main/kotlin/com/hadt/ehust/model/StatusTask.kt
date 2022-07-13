@@ -10,7 +10,7 @@ enum class StatusTask {
         NEW -> "New"
         IN_PROGRESS -> "In progress"
         FINISHED -> "Finished"
-        CANCEL -> "Canceled"
+        CANCEL -> "Cancelled"
     }
 
 }
