@@ -15,4 +15,6 @@ interface PairingRepository : JpaRepository<PairingTeacherWithStudent, Int>{
     fun findUserByIdStudentAndNameProject(@Param("id") id:Int, @Param("name") name: String?): Optional<PairingTeacherWithStudent?>
 
     fun findByNameProject(nameProject: String): List<PairingTeacherWithStudent>?
+
+    fun findByIdTeacher(idTeacher: Int): List<PairingTeacherWithStudent>?
 }

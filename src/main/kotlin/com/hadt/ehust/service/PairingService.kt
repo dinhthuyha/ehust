@@ -30,7 +30,10 @@ class PairingService(
         return ResponseEntity.ok(HttpStatus.OK)
     }
 
-    fun getAllProjectInSemester(){}
+    fun getAllProjectByIdTeacherAndSemester(idTeacher: Int, semester: Int): ResponseEntity<List<PairingTeacherWithStudent>>{
+        val list = pairingRepository.findByIdTeacher(idTeacher)?.filter { it.semester == semester }
+        return ResponseEntity.ok().body(list)
+    }
     fun getAllSemester():ResponseEntity<List<Int>>{
         val semsters = pairingRepository.findAll().map { it.semester!! }.distinct().sortedDescending()
         return ResponseEntity.ok().body(semsters)
