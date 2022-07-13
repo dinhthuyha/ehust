@@ -23,7 +23,9 @@ class PairingTeacherWithStudent(
     val idTeacher : Int,
 
     @Column(name = "name_project")
-    val nameProject: String
+    val nameProject: String,
+
+    val semester: Int? = null
 
     //todo: can co id_class
 )

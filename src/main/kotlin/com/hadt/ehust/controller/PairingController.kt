@@ -1,6 +1,7 @@
 package com.hadt.ehust.controller
 
 import com.hadt.ehust.service.PairingService
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
@@ -16,4 +17,7 @@ class PairingController( private val pairingService: PairingService) {
         @RequestParam(name = "id_teacher") idTeacher: Int,
         @RequestParam(name = "name_project") nameProject: String) =
         pairingService.assignProjectInstructions(idStudent, idTeacher, nameProject)
+
+    @GetMapping("all/semester")
+    fun getAllSemester()= pairingService.getAllSemester()
 }
