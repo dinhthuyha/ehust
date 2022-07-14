@@ -23,6 +23,9 @@ class Comments(
     var idUser: Int,
     val content: String,
 
+    @OneToMany(mappedBy = "comment")
+    var attachments: Set<Attachment>? = null,
+
     @Column(name = "timestamp", columnDefinition = "TIMESTAMP")
     val timestamp: LocalDateTime? = null,
 

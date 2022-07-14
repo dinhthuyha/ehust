@@ -1,5 +1,6 @@
 package com.hadt.ehust.controller
 
+import com.hadt.ehust.entities.Attachment
 import com.hadt.ehust.entities.Comments
 import com.hadt.ehust.service.CommentService
 import org.springframework.web.bind.annotation.DeleteMapping
@@ -20,6 +21,9 @@ class CommentController( private val commentService: CommentService) {
 
     @PostMapping("comments/{id_task}")
     fun postComment(@RequestBody comment: Comments, @PathVariable("id_task") idTask: Int) = commentService.postComment(idTask, comment)
+
+    @PostMapping("comments/{id_cmt}/attachment")
+    fun addAttachment(@PathVariable("id_cmt") id: Int, @RequestBody attachment: Attachment) = commentService.addAttachment(id, attachment)
 
     @DeleteMapping("deleteComment")
     fun deleteCommentById(@PathVariable("id") id: Int) = commentService.deleteComment(id)
