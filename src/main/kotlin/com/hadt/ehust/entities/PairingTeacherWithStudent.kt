@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo
 import com.fasterxml.jackson.annotation.JsonIgnore
 import com.fasterxml.jackson.annotation.JsonProperty
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import javax.persistence.*
 
 @Entity
@@ -12,6 +14,7 @@ import javax.persistence.*
     generator = ObjectIdGenerators.PropertyGenerator::class,
     property = "id"
 )
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 class PairingTeacherWithStudent(
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Int? = null,
@@ -25,7 +28,12 @@ class PairingTeacherWithStudent(
     @Column(name = "name_project")
     val nameProject: String,
 
-    val semester: Int? = null
+    val semester: Int? = null,
+    @Transient
+    var nameStudent: String? = null,
+
+    @Transient
+    var codeProject: String? = null
 
     //todo: can co id_class
 )

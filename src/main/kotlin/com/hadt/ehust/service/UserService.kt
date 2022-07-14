@@ -204,7 +204,8 @@ class UserService(
                                     dateStudy = it.dateStudy,
                                     subjectClass = subject,
                                     dateFinishCourse = it.dateFinishCourse,
-                                    dateStartCourse = it.dateStartCourse
+                                    dateStartCourse = it.dateStartCourse,
+                                    semester = it.semester
                                 )
                             )
                         }

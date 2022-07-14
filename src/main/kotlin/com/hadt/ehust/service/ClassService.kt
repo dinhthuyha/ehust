@@ -70,7 +70,10 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
         return ResponseEntity.ok(newProjects.distinctBy { it.name })
     }
 
-
+    fun findMaxSemester(): ResponseEntity<Int> {
+        val semester = classStudentRepository.findAll().map { it.semester }.maxOf { it?:0 }
+        return ResponseEntity.ok().body(semester)
+    }
 
 
 }

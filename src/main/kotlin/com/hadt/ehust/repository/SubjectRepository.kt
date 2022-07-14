@@ -12,4 +12,6 @@ interface SubjectRepository: JpaRepository<Subject, String> {
 
     @Query(value = "SELECT * FROM subject c WHERE c.name = :nameCourse and  c.is_project =true", nativeQuery = true)
     fun findAllUserInClass(  @Param("nameCourse") nameCourse: String): Optional<Subject>
+
+    fun findByName(name: String): Subject?
 }

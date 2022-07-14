@@ -29,6 +29,7 @@ class ClassStudentController(private val classService: ClassService) {
     @GetMapping("project/current/semester")
     fun findAllProjectCurrentSemester() = classService.findAllProjectCurrentSemester()
 
-
+    @GetMapping("max/semester")
+    fun findMaxSemester()= classService.findMaxSemester()
 
 }
