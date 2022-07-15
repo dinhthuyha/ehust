@@ -1,9 +1,11 @@
 package com.hadt.ehust.controller
 
 import com.hadt.ehust.entities.News
+import com.hadt.ehust.entities.Task
 import com.hadt.ehust.model.StatusNotification
 import com.hadt.ehust.model.TypeNotification
 import com.hadt.ehust.service.NewsService
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -27,4 +29,10 @@ class NewsController(
 
     @PostMapping("/notification/new/task")
     fun postNotificationNewTask(@RequestBody news: News) = newsService.postNotificationNewTask(news)
+
+    @PutMapping("/notification/update/task")
+    fun notificationUpdateTask(@RequestBody task: Task) = newsService.notificationUpdateTask(task)
+
+    @PostMapping("/clear/notification/read")
+    fun clearNotificationRead(@RequestBody newsReads: List<News>) = newsService.clearNotificationRead(newsReads)
 }

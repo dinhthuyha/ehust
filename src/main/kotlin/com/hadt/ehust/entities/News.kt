@@ -13,7 +13,7 @@ import javax.persistence.*
 class News(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    val id: Int,
+    val id: Int? = null,
     val title: String,
     @Column(columnDefinition = "TEXT")
     val content: String,
@@ -24,18 +24,21 @@ class News(
     val type: TypeNotification,
     @Enumerated(EnumType.ORDINAL)
     val status: StatusNotification,
+    //post nay do ai cap nhat
     val idUserPost: Int? = null,
     @Transient
-    val nameUserPost: String?  = null
+    val nameUserPost: String?  = null,
+    val idTask: Int? = null
 ) {
     fun copy(
-        id: Int = this.id,
+        id: Int? = this.id,
         title: String = this.title,
         content: String = this.content,
         datePost: String = this.datePost,
         type: TypeNotification = this.type,
         status: StatusNotification = this.status,
         idUserPost: Int? = this.idUserPost,
-        nameUserPost: String? = this.nameUserPost
-    ): News = News(id, title, content, datePost, type, status, idUserPost, nameUserPost)
+        nameUserPost: String? = this.nameUserPost,
+        idTask: Int? = this.idTask
+    ): News = News(id, title, content, datePost, type, status, idUserPost, nameUserPost, idTask)
 }
