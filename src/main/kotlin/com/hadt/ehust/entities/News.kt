@@ -1,12 +1,15 @@
 package com.hadt.ehust.entities
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import com.fasterxml.jackson.databind.PropertyNamingStrategies
+import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.hadt.ehust.model.StatusNotification
 import com.hadt.ehust.model.TypeNotification
 import javax.persistence.*
 
 @Entity
 @Table(name = "news")
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy::class)
 class News(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -20,7 +23,10 @@ class News(
     @Enumerated(EnumType.ORDINAL)
     val type: TypeNotification,
     @Enumerated(EnumType.ORDINAL)
-    val status: StatusNotification
+    val status: StatusNotification,
+    val idUserPost: Int? = null,
+    @Transient
+    val nameUserPost: String?  = null
 ) {
     fun copy(
         id: Int = this.id,
@@ -28,6 +34,8 @@ class News(
         content: String = this.content,
         datePost: String = this.datePost,
         type: TypeNotification = this.type,
-        status: StatusNotification = this.status
-    ): News = News(id, title, content, datePost, type, status)
+        status: StatusNotification = this.status,
+        idUserPost: Int? = this.idUserPost,
+        nameUserPost: String? = this.nameUserPost
+    ): News = News(id, title, content, datePost, type, status, idUserPost, nameUserPost)
 }
