@@ -29,12 +29,13 @@ class TopicController(
     /**
      * xem ds topic theo (id_gv, ten do an)
      */
-    @GetMapping("topic/teacher/{id_teacher}/{name_teacher}/{id_project}")
+    @GetMapping("topic/teacher/{id_teacher}/{name_teacher}/{id_project}/{semester}")
     fun findTopicByNameProjectAndIdTeacher(
         @PathVariable(value = "name_teacher") nameTeacher: String,
         @PathVariable(value = "id_project") idProject: String,
-        @PathVariable(value = "id_teacher") idTeacher: Int
-    ) = topicService.findTopicByNameProjectAndIdTeacher(nameTeacher, idProject, idTeacher)
+        @PathVariable(value = "id_teacher") idTeacher: Int,
+        @PathVariable(value = "semester") semester: Int
+    ) = topicService.findTopicByNameProjectAndIdTeacher(nameTeacher, idProject, idTeacher, semester)
 
     @PostMapping("/topic/suggestion")
     fun addTopicSuggestion(@RequestBody params: ObjectNode): ResponseEntity<*> {

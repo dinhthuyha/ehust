@@ -45,6 +45,8 @@ class Topic(
     @OneToMany(mappedBy = "topics")
     val listClass: Set<Task>? = null,
 
+    val semester: Int? = null
+
     )
 
 fun Topic.copy(

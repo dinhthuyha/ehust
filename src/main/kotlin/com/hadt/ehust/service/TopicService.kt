@@ -42,7 +42,8 @@ class TopicService(
     fun findTopicByNameProjectAndIdTeacher(
         nameTeacher: String,
         idProject: String,
-        idTeacher: Int
+        idTeacher: Int,
+        semester: Int
     ): ResponseEntity<List<Topic>>? {
         var mIdTeacher: Int? = idTeacher
         when (Utils.hasRole(Role.ROLE_TEACHER)) {
@@ -52,7 +53,7 @@ class TopicService(
             }
         }
         mIdTeacher?.let {
-            val topics = topicRepository.findByIdTeacher(it)?.filter { it.subject?.id == idProject }
+            val topics = topicRepository.findByIdTeacher(it)?.filter { it.subject?.id == idProject && it.semester == semester }
                 ?.map {
 
                     if (Utils.hasRole(Role.ROLE_TEACHER)) {
