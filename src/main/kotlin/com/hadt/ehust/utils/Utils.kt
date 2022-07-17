@@ -15,4 +15,6 @@ object Utils {
         val id = SecurityContextHolder.getContext().authentication.principal as String
         return id.toInt()
     }
+
+    fun isAuthenticated(): Boolean = SecurityContextHolder.getContext().authentication.isAuthenticated
 }

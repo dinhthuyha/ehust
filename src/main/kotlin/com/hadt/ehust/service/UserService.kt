@@ -10,6 +10,7 @@ import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.security.JwtUtils
 import com.hadt.ehust.security.UserDetailsImpl
 import com.hadt.ehust.utils.Utils
+import org.springframework.data.repository.findByIdOrNull
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -194,7 +195,7 @@ class UserService(
                         ?.forEach {
                             val subject = Subject(
                                 id = it.subjectClass?.id!!,
-                                name = it.subjectClass?.name!!
+                                name = it.subjectClass.name
                             )
                             classStudents.add(
                                 ClassStudent(
@@ -213,5 +214,15 @@ class UserService(
                 }
             ResponseEntity.ok(classStudents.toList())
         }.orElse(ResponseEntity.notFound().build())
+    }
+
+    fun checkToken(): ResponseEntity<Any> {
+        return if (Utils.isAuthenticated()) {
+            userRepository.findByIdOrNull(Utils.getCurrentUserId())?.let {
+                ResponseEntity.ok(jwtUtils.createToken(it))
+            } ?: ResponseEntity.badRequest().build()
+        } else {
+            ResponseEntity.badRequest().build()
+        }
     }
 }

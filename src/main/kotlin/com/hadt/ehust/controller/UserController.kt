@@ -3,6 +3,8 @@ package com.hadt.ehust.controller
 import com.hadt.ehust.service.UserService
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.model.Role
+import com.hadt.ehust.utils.Utils
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -10,6 +12,8 @@ import org.springframework.web.bind.annotation.*
 class UserController(
     private val userService: UserService
 ) {
+    @GetMapping("/checkpoint")
+    fun checkToken(): ResponseEntity<Any> = userService.checkToken()
 
     @PostMapping("/signin")
     fun login(@RequestParam(name = "id") id: Int, @RequestParam(name = "password") password: String): Map<String,Any> {

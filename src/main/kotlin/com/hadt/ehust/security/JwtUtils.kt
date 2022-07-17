@@ -8,24 +8,29 @@ import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
+import java.security.Key
+import java.time.Duration
+import java.time.Instant
+import java.time.temporal.ChronoUnit
 import java.util.*
+import java.util.concurrent.TimeUnit
 import javax.annotation.PostConstruct
+import javax.crypto.SecretKey
 
 @Service
 class JwtUtils {
     @Value("\${security.jwt.token.secret-key:secret-key}")
-    private var secretKey: String? = null
+    private var base64Secret: String? = null
 
     @Value("\${security.jwt.token.expire-length:3600000}")
     private var validityInMilliseconds: Long = 3600000 //1h
 
-    private val keyPair = Keys.keyPairFor(SignatureAlgorithm.ES256)
+    private lateinit var secretKey: SecretKey
 
     @PostConstruct
     protected fun init() {
-        secretKey = Base64.getEncoder().encodeToString(secretKey!!.toByteArray())
+        secretKey = Keys.hmacShaKeyFor(Base64.getDecoder().decode(base64Secret))
     }
-
 
     fun createToken( user: User): Map<String, String?> {
         val hashMap = hashMapOf<String, String?>()
@@ -46,9 +51,10 @@ class JwtUtils {
 
     fun generateAuthToken(user: UserDetailsImpl): Map<String, Any> {
         val response = hashMapOf<String, Any>()
-        var token = Jwts.builder()
+        val token = Jwts.builder()
             .setSubject(user.username)
-            .signWith(keyPair.private)
+            .signWith(secretKey, SignatureAlgorithm.HS384)
+            .setExpiration(Date(Instant.now().toEpochMilli() + TimeUnit.MILLISECONDS.convert(Duration.of(7, TimeUnit.DAYS.toChronoUnit()))))
             .compact()
         response["token"] = token
         response["profile"] = createToken(user.user)
@@ -57,7 +63,7 @@ class JwtUtils {
 
     fun validateAuthToken(jwt: String?): Jws<Claims> {
         return Jwts.parserBuilder()
-            .setSigningKey(keyPair.public)
+            .setSigningKey(secretKey)
             .build()
             .parseClaimsJws(jwt)
     }
