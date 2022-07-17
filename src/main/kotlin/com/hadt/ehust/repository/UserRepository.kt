@@ -1,6 +1,7 @@
 package com.hadt.ehust.repository
 
 import com.hadt.ehust.entities.User
+import com.hadt.ehust.model.Role
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.data.jpa.repository.Query
 import org.springframework.data.repository.query.Param
@@ -17,5 +18,7 @@ interface UserRepository: JpaRepository<User,Int>{
     fun findUserByFullName(@Param("fullName") fullName:String): Optional<User>
 
     fun findByFullName(fullName: String): User?
+
+    fun findByRole(role: Role): kotlin.collections.List<User>?
 
 }

@@ -1,6 +1,7 @@
 package com.hadt.ehust.service
 
 import com.hadt.ehust.entities.PairingTeacherWithStudent
+import com.hadt.ehust.model.Role
 import com.hadt.ehust.repository.ClassStudentRepository
 import com.hadt.ehust.repository.PairingRepository
 import com.hadt.ehust.repository.SubjectRepository
@@ -13,14 +14,12 @@ import org.springframework.stereotype.Service
 class PairingService(
     private val pairingRepository: PairingRepository,
     private val userRepository: UserRepository,
-    private val subjectRepository: SubjectRepository
+    private val subjectRepository: SubjectRepository,
+    private val classStudentRepository: ClassStudentRepository
 ) {
 
     fun assignProjectInstructions(idStudent: Int, idTeacher: Int, nameProject: String): ResponseEntity<HttpStatus> {
-        var semester: Int? = 0
-        userRepository.findById(idStudent).map {
-           semester = it.likedClasses?.find { it.subjectClass?.name == nameProject }?.semester
-        }
+        val semester = classStudentRepository.findAll().map { it.semester }.maxOf { it?:0 }
         pairingRepository.save(
             PairingTeacherWithStudent(
                 idStudent = idStudent,
@@ -47,4 +46,21 @@ class PairingService(
         return ResponseEntity.ok().body(semsters)
 
     }
+
+    fun getInformation(): ResponseEntity<DashBoard>{
+        val semesterCurrent = classStudentRepository.findAll().map { it.semester }.maxOf { it?:0 }
+        val projects = classStudentRepository.findBySemester(semesterCurrent)?.filter { it.subjectClass?.isProject == true }
+        var numberStudentStudyProject = 0
+        projects?.forEach { numberStudentStudyProject += it.likes?.filter { it.role == Role.ROLE_STUDENT }?.size?:0 }
+        val numberTeacher = userRepository.findByRole(Role.ROLE_TEACHER)
+        val information = DashBoard(semesterCurrent, projects?.size?:0,numberStudentStudyProject, numberTeacher?.size?:0)
+        return ResponseEntity.ok().body(information)
+    }
+
+    data class DashBoard(
+        val semester: Int,
+        val numberProject: Int,
+        val numberStudent: Int,
+        val numberTeacher: Int
+    )
 }
