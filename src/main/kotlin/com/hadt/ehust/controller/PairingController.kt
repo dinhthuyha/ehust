@@ -1,10 +1,13 @@
 package com.hadt.ehust.controller
 
+import com.hadt.ehust.entities.PairingTeacherWithStudent
 import com.hadt.ehust.model.Role
 import com.hadt.ehust.service.PairingService
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
+import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.RestController
@@ -34,4 +37,10 @@ class PairingController(private val pairingService: PairingService) {
     @RolesAllowed(Role.ADMIN)
     @GetMapping("information/dashboard")
     fun getInformationDashBoard() = pairingService.getInformation()
+
+    @GetMapping("all/pairing/{semester}")
+    fun getAllDataBySemester(@PathVariable("semester") semester: Int) = pairingService.getAllDataBySemester(semester)
+
+    @DeleteMapping("delete/{assigns}")
+    fun deleteAssigns(@RequestBody list: List<PairingTeacherWithStudent>) = pairingService.deleteAssigns(list)
 }

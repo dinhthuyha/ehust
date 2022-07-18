@@ -219,7 +219,7 @@ class UserService(
     fun checkToken(): ResponseEntity<Any> {
         return if (Utils.isAuthenticated()) {
             userRepository.findByIdOrNull(Utils.getCurrentUserId())?.let {
-                ResponseEntity.ok(jwtUtils.createToken(it))
+                ResponseEntity.ok(mapOf("profile" to jwtUtils.createToken(it)))
             } ?: ResponseEntity.badRequest().build()
         } else {
             ResponseEntity.badRequest().build()

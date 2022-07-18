@@ -33,7 +33,10 @@ class PairingTeacherWithStudent(
     var nameStudent: String? = null,
 
     @Transient
-    var codeProject: String? = null
+    var codeProject: String? = null,
+
+    @Transient
+    var nameTeacher: String? = null
 
     //todo: can co id_class
 )

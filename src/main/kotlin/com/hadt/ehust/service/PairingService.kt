@@ -57,6 +57,30 @@ class PairingService(
         return ResponseEntity.ok().body(information)
     }
 
+    fun getAllDataBySemester(semester: Int): ResponseEntity<List<PairingTeacherWithStudent>> {
+        var nameStudent = ""
+        var nameTeacher = ""
+        pairingRepository.findBySemester(semester)?.let {
+            it.forEach { pairing ->
+                userRepository.findById(pairing.idStudent?:0).map {
+                    nameStudent = it.fullName
+                }
+                userRepository.findById(pairing.idTeacher?:0).map {
+                    nameTeacher = it.fullName
+                }
+                pairing.nameStudent = nameStudent
+                pairing.nameTeacher = nameTeacher
+            }
+         return ResponseEntity.ok().body(it)
+        }
+        return ResponseEntity.notFound().build()
+    }
+
+    fun deleteAssigns(list: List<PairingTeacherWithStudent>): ResponseEntity<HttpStatus> {
+        pairingRepository.deleteAll(list)
+        return ResponseEntity.ok(HttpStatus.OK)
+    }
+
     data class DashBoard(
         val semester: Int,
         val numberProject: Int,
