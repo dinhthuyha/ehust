@@ -5,6 +5,7 @@ import com.hadt.ehust.entities.Topic
 import com.hadt.ehust.entities.copy
 import com.hadt.ehust.model.Role
 import com.hadt.ehust.model.StatusTopic
+import com.hadt.ehust.repository.PairingRepository
 import com.hadt.ehust.repository.SubjectRepository
 import com.hadt.ehust.repository.TopicRepository
 import com.hadt.ehust.repository.UserRepository
@@ -19,7 +20,8 @@ import org.springframework.stereotype.Service
 class TopicService(
     private val topicRepository: TopicRepository,
     private val userRepository: UserRepository,
-    private val subjectRepository: SubjectRepository
+    private val subjectRepository: SubjectRepository,
+    private val pairingRepository: PairingRepository
 ) {
 
     fun updateTopicStatus(idTopic: Int, status: StatusTopic, idStudent: Int): ResponseEntity<HttpStatus> {
@@ -44,7 +46,7 @@ class TopicService(
         idProject: String,
         idTeacher: Int,
         semester: Int
-    ): ResponseEntity<List<Topic>>? {
+    ): ResponseEntity<MutableList<Topic?>> {
         var mIdTeacher: Int? = idTeacher
         when (Utils.hasRole(Role.ROLE_TEACHER)) {
             true -> {}
@@ -53,24 +55,33 @@ class TopicService(
             }
         }
         mIdTeacher?.let {
-            val topics = topicRepository.findByIdTeacher(it)?.filter { it.subject?.id == idProject && it.semester == semester }
-                ?.map {
+            var topics =
+                topicRepository.findByIdTeacher(it)?.filter { it.subject?.id == idProject && it.semester == semester }
+                    ?.map {
 
-                    if (Utils.hasRole(Role.ROLE_TEACHER)) {
-                        val nameStudent =
-                            it.idStudent?.let { it1 -> userRepository.findById(it1) }?.map { it.fullName }?.get()
-                        it.copy(
-                            subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()),
-                            nameStudent = nameStudent ?: ""
-                        )
-                    } else {
-                        it.copy(
-                            subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()),
-                        )
+                        if (Utils.hasRole(Role.ROLE_TEACHER)) {
+                            val nameStudent =
+                                it.idStudent?.let { it1 -> userRepository.findById(it1) }?.map { it.fullName }?.get()
+                            it.copy(
+                                subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()),
+                                nameStudent = nameStudent ?: ""
+                            )
+                        } else {
+                            it.copy(
+                                subject = Subject(it.subject?.id.toString(), it.subject?.name.toString()),
+                            )
+                        }
+
                     }
-
+            val result = mutableListOf<Topic?>()
+            topics?.forEach { topic ->
+                val pair = pairingRepository.findByIdTeacher(topic?.idTeacher ?: 0)
+                    ?.firstOrNull { it.semester == semester && it.idStudent == topic?.idStudent }
+                if (pair!= null) {
+                    result.add(topic)
                 }
-            return ResponseEntity.ok().body(topics)
+            }
+            return ResponseEntity.ok().body(result)
         }
 
         return ResponseEntity.notFound().build()
