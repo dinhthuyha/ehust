@@ -225,4 +225,11 @@ class UserService(
             ResponseEntity.badRequest().build()
         }
     }
+
+    fun searchAllUserByFullName(fullName: String): ResponseEntity<User> {
+        userRepository.findByFullName(fullName)?.let {
+            return ResponseEntity.ok().body(it)
+        }
+        return ResponseEntity.notFound().build()
+    }
 }

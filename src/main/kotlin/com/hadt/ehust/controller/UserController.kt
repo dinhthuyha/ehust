@@ -55,4 +55,7 @@ class UserController(
     @GetMapping("/user/{id}/schedule")
     fun findByScheduleByIdStudent(@PathVariable(value = "id") id: Int) = userService.findByScheduleByIdStudent(id)
 
+    @GetMapping("/find/all/user/{full_name}")
+    fun searchAllUserByFullName(@PathVariable("full_name") fullName: String) = userService.searchAllUserByFullName(fullName)
+
 }
