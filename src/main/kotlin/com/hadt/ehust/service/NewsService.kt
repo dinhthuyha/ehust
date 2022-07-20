@@ -2,14 +2,17 @@ package com.hadt.ehust.service
 
 import com.hadt.ehust.entities.News
 import com.hadt.ehust.entities.Task
+import com.hadt.ehust.entities.Topic
 import com.hadt.ehust.model.Role
 import com.hadt.ehust.model.StatusNotification
 import com.hadt.ehust.model.StatusTask
 import com.hadt.ehust.model.TypeNotification
 import com.hadt.ehust.repository.NewsRepository
 import com.hadt.ehust.repository.TaskRepository
+import com.hadt.ehust.repository.TopicRepository
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.utils.Utils
+import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -20,19 +23,29 @@ import java.time.format.DateTimeFormatter
 class NewsService(
     private val newsRepository: NewsRepository,
     private val userRepository: UserRepository,
-    private val taskRepository: TaskRepository
+    private val taskRepository: TaskRepository,
+    private val topicRepository: TopicRepository
 ) {
     fun findAllNews(type: TypeNotification): List<News> {
         val news =
-            return when (type == TypeNotification.TYPE_PROJECT) {
+             when (type == TypeNotification.TYPE_PROJECT) {
                 true -> {
-                    newsRepository.findByType(type).filter { it.idUserPost != Utils.getCurrentUserId() }
+                    var idTeacherTopic: Int ?= null
+                   val list = mutableListOf<News>()
+                    newsRepository.findByType(type).filter { it.idUserPost != Utils.getCurrentUserId() }.let {
+                        it.forEach {
+                            taskRepository.findById(it.idTask?:0).map { idTeacherTopic = it.topics?.idTeacher }
+                            if (idTeacherTopic == Utils.getCurrentUserId())
+                                list.add(it)
+                        }
+                    }
+                    return list
+
                 }
                 false -> {
-                    newsRepository.findByType(type)
+                   return newsRepository.findByType(type)
                 }
             }
-
     }
 
     fun updateStatusNews(id: Int, status: StatusNotification, type: TypeNotification): ResponseEntity<List<News>> {

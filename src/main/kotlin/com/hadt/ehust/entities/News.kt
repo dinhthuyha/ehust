@@ -28,7 +28,9 @@ class News(
     val idUserPost: Int? = null,
     @Transient
     val nameUserPost: String?  = null,
-    val idTask: Int? = null
+    val idTask: Int? = null,
+    @Transient
+    val idTopic: Int? = null
 ) {
     fun copy(
         id: Int? = this.id,
