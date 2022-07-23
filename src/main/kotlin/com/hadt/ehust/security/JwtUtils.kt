@@ -8,10 +8,8 @@ import io.jsonwebtoken.SignatureAlgorithm
 import io.jsonwebtoken.security.Keys
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Service
-import java.security.Key
 import java.time.Duration
 import java.time.Instant
-import java.time.temporal.ChronoUnit
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.annotation.PostConstruct
@@ -39,10 +37,9 @@ class JwtUtils {
         hashMap["full_name"] = user.fullName
         hashMap["grade"] = user.grade ?: ""
         hashMap["institute_of_management"] = user.instituteOfManagement
-        hashMap["gender"] = user.gender
         hashMap["course"] = user.course ?: ""
         hashMap["email"] = user.email
-        hashMap["cadre_status"] = user.cadreStatus?: ""
+        hashMap["cadre_status"] = user.cadreStatus ?: ""
         hashMap["unit"] = user.unit.toString()
         hashMap["image_background"] = user.imageBackground
         hashMap["image_avatar"] = user.imageAvatar

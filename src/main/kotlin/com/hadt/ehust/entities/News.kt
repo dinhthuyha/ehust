@@ -25,9 +25,9 @@ class News(
     @Enumerated(EnumType.ORDINAL)
     val status: StatusNotification,
     //post nay do ai cap nhat
-    val idUserPost: Int? = null,
+    val idUserUpdate: Int? = null,
     @Transient
-    val nameUserPost: String?  = null,
+    val nameUserUpdate: String?  = null,
     val idTask: Int? = null,
     @Transient
     val idTopic: Int? = null
@@ -39,8 +39,8 @@ class News(
         datePost: String = this.datePost,
         type: TypeNotification = this.type,
         status: StatusNotification = this.status,
-        idUserPost: Int? = this.idUserPost,
-        nameUserPost: String? = this.nameUserPost,
+        idUserPost: Int? = this.idUserUpdate,
+        nameUserPost: String? = this.nameUserUpdate,
         idTask: Int? = this.idTask
     ): News = News(id, title, content, datePost, type, status, idUserPost, nameUserPost, idTask)
 }

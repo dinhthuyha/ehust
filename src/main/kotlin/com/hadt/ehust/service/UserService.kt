@@ -36,15 +36,14 @@ class UserService(
                         id = it.id,
                         fullName = it.fullName,
                         instituteOfManagement = it.instituteOfManagement,
-                        gender = it.gender,
                         grade = it.grade,
                         course = it.course,
-                        email = it.email,
-                        cadreStatus = it.cadreStatus ?: "",
-                        unit = it.unit,
-                        role = it.role,
+                        imageBackground = it.imageBackground,
                         imageAvatar = it.imageAvatar,
-                        imageBackground = it.imageBackground
+                        email = it.email,
+                        role = it.role,
+                        cadreStatus = it.cadreStatus ?: "",
+                        unit = it.unit
                     )
                 )
             } else {
@@ -61,15 +60,14 @@ class UserService(
                         id = it.id,
                         fullName = it.fullName,
                         instituteOfManagement = it.instituteOfManagement,
-                        gender = it.gender,
                         grade = it.grade,
                         course = it.course,
-                        email = it.email,
-                        cadreStatus = it.cadreStatus ?: "",
-                        unit = it.unit,
-                        role = it.role,
+                        imageBackground = it.imageBackground,
                         imageAvatar = it.imageAvatar,
-                        imageBackground = it.imageBackground
+                        email = it.email,
+                        role = it.role,
+                        cadreStatus = it.cadreStatus ?: "",
+                        unit = it.unit
                     )
                 )
             }else {
@@ -85,15 +83,14 @@ class UserService(
                     id = it.id,
                     fullName = it.fullName,
                     instituteOfManagement = it.instituteOfManagement,
-                    gender = it.gender,
                     grade = it.grade,
                     course = it.course,
-                    email = it.email,
-                    cadreStatus = it.cadreStatus ?: "",
-                    unit = it.unit,
-                    role = it.role,
+                    imageBackground = it.imageBackground,
                     imageAvatar = it.imageAvatar,
-                    imageBackground = it.imageBackground
+                    email = it.email,
+                    role = it.role,
+                    cadreStatus = it.cadreStatus ?: "",
+                    unit = it.unit
                 )
             )
         }.orElse(ResponseEntity.notFound().build())
@@ -108,15 +105,14 @@ class UserService(
                         id = it.id,
                         fullName = it.fullName,
                         instituteOfManagement = it.instituteOfManagement,
-                        gender = it.gender,
                         grade = it.grade,
                         course = it.course,
-                        email = it.email,
-                        cadreStatus = it.cadreStatus ?: "",
-                        unit = it.unit,
-                        role = it.role,
+                        imageBackground = it.imageBackground,
                         imageAvatar = it.imageAvatar,
-                        imageBackground = it.imageBackground
+                        email = it.email,
+                        role = it.role,
+                        cadreStatus = it.cadreStatus ?: "",
+                        unit = it.unit
                     )
                 )
             }

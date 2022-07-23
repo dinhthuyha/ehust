@@ -11,7 +11,6 @@ import com.hadt.ehust.repository.TopicRepository
 import org.springframework.data.repository.findByIdOrNull
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.utils.Utils
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service

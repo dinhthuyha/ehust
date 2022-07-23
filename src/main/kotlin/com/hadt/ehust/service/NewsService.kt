@@ -2,8 +2,6 @@ package com.hadt.ehust.service
 
 import com.hadt.ehust.entities.News
 import com.hadt.ehust.entities.Task
-import com.hadt.ehust.entities.Topic
-import com.hadt.ehust.model.Role
 import com.hadt.ehust.model.StatusNotification
 import com.hadt.ehust.model.StatusTask
 import com.hadt.ehust.model.TypeNotification
@@ -12,7 +10,6 @@ import com.hadt.ehust.repository.TaskRepository
 import com.hadt.ehust.repository.TopicRepository
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.utils.Utils
-import org.springframework.data.jpa.domain.AbstractPersistable_.id
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
@@ -32,14 +29,14 @@ class NewsService(
                 true -> {
                     var idTeacherTopic: Int ?= null
                    val list = mutableListOf<News>()
-                    newsRepository.findByType(type).filter { it.idUserPost != Utils.getCurrentUserId() }.let {
+                    newsRepository.findByType(type).filter { it.idUserUpdate != Utils.getCurrentUserId() }.let {
                         it.forEach {
                             taskRepository.findById(it.idTask?:0).map { idTeacherTopic = it.topics?.idTeacher }
                             if (idTeacherTopic == Utils.getCurrentUserId())
                                 list.add(it)
                         }
                     }
-                    return list
+                    return list.sortedByDescending { it.datePost }
 
                 }
                 false -> {
@@ -107,7 +104,7 @@ class NewsService(
             datePost = datePost,
             type = TypeNotification.TYPE_PROJECT,
             status = StatusNotification.STATUS_UNREAD,
-            idUserPost = idUserPost,
+            idUserUpdate = idUserPost,
             idTask = task.id
         )
         newsRepository.save(information!!)

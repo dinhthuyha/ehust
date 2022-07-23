@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
 import com.hadt.ehust.model.Role
-import java.util.*
 import javax.persistence.*
 
 @Entity
@@ -29,7 +28,6 @@ data class User(
     val fullName: String,
     @Column(name = "institute_of_management")
     val instituteOfManagement: String? = null,
-    val gender: String? = null,
     val grade: String? = null,
     val course: String? = null,
 

@@ -1,6 +1,5 @@
 package com.hadt.ehust.service
 
-import com.hadt.ehust.entities.ClassStudent
 import com.hadt.ehust.repository.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
