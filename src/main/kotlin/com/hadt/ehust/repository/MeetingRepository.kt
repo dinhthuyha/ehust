@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository
 @Repository
 interface MeetingRepository : JpaRepository<Meeting, Int>{
 
-    fun findByIdUserStudent(idUserStudent: Int): List<Meeting>
+    fun findByIdStudent(idStudent: Int): List<Meeting>
 
-    fun findByIdUserTeacher(idUserTeacher: Int):List<Meeting>
+    fun findByIdTeacher(idTeacher: Int):List<Meeting>
 }

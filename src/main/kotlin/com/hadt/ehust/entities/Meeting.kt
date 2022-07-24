@@ -16,10 +16,10 @@ class Meeting (
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int? = null,
-    @Column(name = "id_user_teacher")
-    val idUserTeacher: Int? = null,
-    @Column(name = "id_user_student")
-    var idUserStudent: Int? = null,
+    @Column(name = "id_teacher")
+    val idTeacher: Int? = null,
+    @Column(name = "id_student")
+    var idStudent: Int? = null,
     val title: String,
     val date: LocalDate,
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
@@ -28,7 +28,7 @@ class Meeting (
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm")
     @Column(name = "end_time")
     val endTime: LocalTime,
-    @Column( name= "name_user_student")
-    val nameUserStudent: String,
+    @Column( name= "name_student")
+    val nameStudent: String,
         )
 
