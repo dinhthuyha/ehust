@@ -56,9 +56,9 @@ class Task(
     @OneToMany(mappedBy = "task")
     val attachments: Set<Attachment> = emptySet(),
 
-    @JsonIgnore
-    @ManyToMany(mappedBy = "likedTasks")
-    val likes: Set<User>? = null,
+//    @JsonIgnore
+//    @ManyToMany(mappedBy = "likedTasks")
+//    val likes: Set<User>? = null,
 )
 
 fun Task.copy(
@@ -74,8 +74,7 @@ fun Task.copy(
      assignee: String? = this.assignee,
      topics: Topic? = this.topics,
      commentsTask: Set<Comments>? = this.commentsTask,
-     attachments: Set<Attachment> = this.attachments,
-     likes: Set<User>? = this.likes,
+     attachments: Set<Attachment> = this.attachments
 ) = Task(
     id,
     title,
@@ -90,5 +89,4 @@ fun Task.copy(
     topics,
     commentsTask,
     attachments,
-    likes,
 )

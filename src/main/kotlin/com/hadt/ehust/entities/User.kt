@@ -54,10 +54,10 @@ data class User(
     @ManyToMany
     @JoinTable(name = "user_subject", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_subject")] )
     val userSubjects: Set<Subject>?=null,
-
-    @ManyToMany
-    @JoinTable(name = "user_task", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_task")] )
-    val likedTasks: Set<Task>?=null,
+//
+//    @ManyToMany
+//    @JoinTable(name = "user_task", joinColumns = [JoinColumn(name = "id_user")], inverseJoinColumns = [JoinColumn(name = "id_task")] )
+//    val likedTasks: Set<Task>?=null,
 
 
 
