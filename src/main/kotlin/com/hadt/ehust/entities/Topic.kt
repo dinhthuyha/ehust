@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.annotation.ObjectIdGenerators
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.hadt.ehust.model.ProgressStatus
 import com.hadt.ehust.model.StatusTopic
 import org.apache.tomcat.jni.Local
 import java.time.LocalTime
@@ -32,7 +33,9 @@ class Topic(
     @Column(name = "id_teacher")
     val idTeacher: Int? = null,
 
-
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "progress_status")
+    val progressStatus: ProgressStatus?= null,
 
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "status_topic")
@@ -56,7 +59,8 @@ fun Topic.copy(
     idTeacher: Int? = this.idTeacher,
     status: StatusTopic? = this.status,
     subject: Subject? = this.subject,
-    nameStudent: String? = ""
+    nameStudent: String? = "",
+    progressStatus: ProgressStatus? = this.progressStatus
 
 ) = Topic(
     id = id,
@@ -65,5 +69,6 @@ fun Topic.copy(
     idTeacher = idTeacher,
     status = status,
     subject = subject,
-    nameStudent = nameStudent
+    nameStudent = nameStudent,
+    progressStatus = progressStatus
     )

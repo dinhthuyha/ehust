@@ -1,6 +1,7 @@
 package com.hadt.ehust.service
 
 import com.hadt.ehust.entities.PairingTeacherWithStudent
+import com.hadt.ehust.entities.User
 import com.hadt.ehust.model.Role
 import com.hadt.ehust.repository.ClassStudentRepository
 import com.hadt.ehust.repository.PairingRepository
@@ -50,10 +51,13 @@ class PairingService(
     fun getInformation(): ResponseEntity<DashBoard>{
         val semesterCurrent = classStudentRepository.findAll().map { it.semester }.maxOf { it?:0 }
         val projects = classStudentRepository.findBySemester(semesterCurrent)?.filter { it.subjectClass?.isProject == true }
-        var numberStudentStudyProject = 0
-        projects?.forEach { numberStudentStudyProject += it.likes?.filter { it.role == Role.ROLE_STUDENT }?.size?:0 }
+        val listStudent = mutableListOf<String>()
+
+        projects?.forEach {  it.likes?.filter { it.role == Role.ROLE_STUDENT }?.map {
+            it.fullName
+        }?.let { listStudent.addAll(it) } }
         val numberTeacher = userRepository.findByRole(Role.ROLE_TEACHER)
-        val information = DashBoard(semesterCurrent, projects?.size?:0,numberStudentStudyProject, numberTeacher?.size?:0)
+        val information = DashBoard(semesterCurrent, projects?.distinctBy { it.subjectClass?.name }?.size?:0,listStudent.distinctBy { it }.size, numberTeacher?.size?:0)
         return ResponseEntity.ok().body(information)
     }
 

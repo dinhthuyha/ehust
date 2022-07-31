@@ -77,7 +77,7 @@ class TaskService(
     fun findAllTaskWillExpire(): ResponseEntity<List<Task>> {
         var idTopics = getListTopicCurrentSemester()
         val listTask = mutableListOf<Task>()
-        idTopics.forEach { id ->
+        idTopics?.forEach { id ->
             taskRepository.findAllTaskWillExpire(id)?.let {
                 listTask.addAll(it.filter { it.showTimeRemain()!=null && it.showTimeRemain()!! <3 })
             }
@@ -86,7 +86,7 @@ class TaskService(
 
     }
 
-    private fun getListTopicCurrentSemester(): List<Int> {
+    private fun getListTopicCurrentSemester(): List<Int>? {
         var idTopics = mutableListOf<Int>()
         val idUser = Utils.getCurrentUserId()
         userRepository.findById(idUser).map { user ->
