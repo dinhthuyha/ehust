@@ -3,6 +3,7 @@ package com.hadt.ehust.entities
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
+import com.hadt.ehust.model.ProgressStatus
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.persistence.*
@@ -34,8 +35,9 @@ class MoreInformationTopic(
     @Column(name ="email_student")
     val emailStudent: String,
     @Column(name = "process_score")
-    val processScore: Float,
+    val processScore: Float? = null,
     @Column(name = "end_score")
-    val endScore: Float
+    val endScore: Float? = null,
+    val stateProcess: ProgressStatus? = null
 )
 
