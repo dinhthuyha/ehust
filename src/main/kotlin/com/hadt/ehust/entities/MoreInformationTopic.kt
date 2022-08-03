@@ -32,6 +32,10 @@ class MoreInformationTopic(
     @Column(name = "id_student")
     val idStudent: Int,
     @Column(name ="email_student")
-    val emailStudent: String
+    val emailStudent: String,
+    @Column(name = "process_score")
+    val processScore: Float,
+    @Column(name = "end_score")
+    val endScore: Float
 )
 
