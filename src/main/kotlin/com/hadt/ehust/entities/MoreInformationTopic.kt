@@ -3,8 +3,6 @@ package com.hadt.ehust.entities
 import com.fasterxml.jackson.annotation.JsonInclude
 import com.fasterxml.jackson.databind.PropertyNamingStrategies
 import com.fasterxml.jackson.databind.annotation.JsonNaming
-import com.hadt.ehust.model.ProgressStatus
-import com.hadt.ehust.model.TypeSubject
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.persistence.*
