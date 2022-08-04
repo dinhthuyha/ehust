@@ -5,6 +5,7 @@ import com.hadt.ehust.entities.Subject
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.model.Project
 import com.hadt.ehust.model.Role
+import com.hadt.ehust.model.TypeSubject
 import com.hadt.ehust.repository.PairingRepository
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.security.JwtUtils
@@ -128,7 +129,7 @@ class UserService(
                     true -> {
 
                         user.userSubjects
-                            ?.filter { it.isProject == true  }
+                            ?.filter { it.type != TypeSubject.NORMAL  }
                             ?.forEach {
                                 projects.add(
                                     Project(
@@ -139,7 +140,7 @@ class UserService(
                             }
                     }
                     false -> {
-                            user.likedClasses?.filter { it.subjectClass?.isProject == true }?.forEach { classStu ->
+                            user.likedClasses?.filter { it.subjectClass?.type != TypeSubject.NORMAL }?.forEach { classStu ->
 
                                 projects.add(
                                     Project(
@@ -183,7 +184,7 @@ class UserService(
         return userRepository.findById(id).map { user ->
             user.userSubjects
                 ?.toList()
-                ?.filter { it.isProject == false }
+                ?.filter { it.type == TypeSubject.NORMAL }
                 ?.forEach { subject ->
                     val semesterCurrent = subject.listClass?.toList()?.maxOfOrNull { it.semester!! }
                     subject.listClass

@@ -1,5 +1,6 @@
 package com.hadt.ehust.service
 
+import com.hadt.ehust.model.TypeSubject
 import com.hadt.ehust.repository.*
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -18,7 +19,7 @@ class ShareService(
         }
        return userRepository.findById(idStudent).map { user ->
              user.userSubjects
-                ?.toList()?.firstOrNull { it.isProject == true && it.name == nameProject }
+                ?.toList()?.firstOrNull { it.type != TypeSubject.NORMAL && it.name == nameProject }
                 ?.listClass
                 ?.firstOrNull()
                  ?.let { oldClass ->

@@ -6,6 +6,7 @@ import com.hadt.ehust.entities.copy
 import com.hadt.ehust.model.StatusTask
 import com.hadt.ehust.repository.AttachmentRepository
 import com.hadt.ehust.model.StatusTopic
+import com.hadt.ehust.model.TypeSubject
 import com.hadt.ehust.repository.TaskRepository
 import com.hadt.ehust.repository.TopicRepository
 import org.springframework.data.repository.findByIdOrNull
@@ -95,7 +96,7 @@ class TaskService(
                 val targetClasses = listClass.filter { it.semester == semester }
                 targetClasses.forEach { cla ->
                     cla.subjectClass?.let {
-                        if (it.isProject == true) {
+                        if (it.type != TypeSubject.NORMAL) {
                             it.topics
                                 ?.filter { topic -> topic.status == StatusTopic.ACCEPT && Utils.getCurrentUserId() == topic.idStudent }
                                 ?.map { it.id!! }

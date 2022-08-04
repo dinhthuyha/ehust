@@ -3,6 +3,7 @@ package com.hadt.ehust.service
 import com.hadt.ehust.entities.ClassStudent
 import com.hadt.ehust.entities.Subject
 import com.hadt.ehust.entities.User
+import com.hadt.ehust.model.TypeSubject
 import com.hadt.ehust.repository.ClassStudentRepository
 
 import org.springframework.http.ResponseEntity
@@ -56,7 +57,7 @@ class ClassService(private val classStudentRepository: ClassStudentRepository) {
         val newProjects = mutableListOf<Subject>()
         val projects = classStudentRepository.findAll()
         val semesterCurrent = projects.maxOf { it.semester!! }
-        projects.filter { it.subjectClass?.isProject ==true && it?.semester == semesterCurrent }.forEach {
+        projects.filter { it.subjectClass?.type != TypeSubject.NORMAL && it?.semester == semesterCurrent }.forEach {
 
             newProjects.add(
                      Subject(
