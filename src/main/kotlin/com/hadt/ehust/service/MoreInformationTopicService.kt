@@ -1,10 +1,13 @@
 package com.hadt.ehust.service
 
 import com.hadt.ehust.entities.MoreInformationTopic
+import com.hadt.ehust.entities.copy
 import com.hadt.ehust.model.TypeSubject
 import com.hadt.ehust.repository.MoreInformationTopicRepository
 import com.hadt.ehust.repository.TopicRepository
 import com.hadt.ehust.repository.UserRepository
+import org.springframework.data.repository.findByIdOrNull
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Service
 
@@ -30,5 +33,19 @@ class MoreInformationTopicService(
             ResponseEntity.ok().body(it)
         }
             .orElse(ResponseEntity.notFound().build())
+    }
+
+    fun updateStateProcessInformationTopic(topic: MoreInformationTopic): ResponseEntity<HttpStatus> {
+       return moreInformationTopicRepository.findByIdOrNull(topic.id)?.let {
+            val processScore = topic.processScore
+            val endScore = topic.endScore
+            val status = topic.stateProcess
+            it.copy(
+                processScore = processScore,
+                endScore = endScore,
+                stateProcess = status
+            ).let ( moreInformationTopicRepository::save )
+            ResponseEntity.ok(HttpStatus.OK)
+        } ?: ResponseEntity.notFound().build()
     }
 }
