@@ -36,10 +36,14 @@ class MoreInformationTopicService(
     }
 
     fun updateStateProcessInformationTopic(topic: MoreInformationTopic): ResponseEntity<HttpStatus> {
+        val processScore = topic.processScore
+        val endScore = topic.endScore
+        val status = topic.stateProcess
+        topicRepository.findByIdOrNull(topic.id)?.let {
+            it.copy(progressStatus = status).let (topicRepository::save)
+        }
        return moreInformationTopicRepository.findByIdOrNull(topic.id)?.let {
-            val processScore = topic.processScore
-            val endScore = topic.endScore
-            val status = topic.stateProcess
+
             it.copy(
                 processScore = processScore,
                 endScore = endScore,
