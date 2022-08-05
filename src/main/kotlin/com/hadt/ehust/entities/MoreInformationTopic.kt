@@ -45,7 +45,9 @@ class MoreInformationTopic(
         val stateProcess: ProgressStatus? = null,
 
         @Transient
-        var type: TypeSubject? = null
+        var type: TypeSubject? = null,
+        @Transient
+        var semester: Int? = null
 )
 
 fun MoreInformationTopic.copy(

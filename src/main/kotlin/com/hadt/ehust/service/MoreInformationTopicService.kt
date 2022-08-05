@@ -28,7 +28,12 @@ class MoreInformationTopicService(
             it.nameTeacher = nameTeacher
             it.nameStudent = nameStudent
             var typeSubject: TypeSubject? = null
-            topicRepository.findById(id).map { typeSubject = it.subject?.type }
+            var semester: Int?=0
+            topicRepository.findById(id).map {
+                typeSubject = it.subject?.type
+                semester = it.semester
+            }
+            it.semester = semester
             it.type = typeSubject
             ResponseEntity.ok().body(it)
         }
