@@ -5,6 +5,7 @@ import com.hadt.ehust.entities.Subject
 import com.hadt.ehust.entities.User
 import com.hadt.ehust.model.Project
 import com.hadt.ehust.model.Role
+import com.hadt.ehust.model.TypeSubject
 import com.hadt.ehust.repository.PairingRepository
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.security.JwtUtils
@@ -181,20 +182,15 @@ class UserService(
     fun findByScheduleByIdStudent(id: Int): ResponseEntity<List<ClassStudent>> {
         val classStudents = mutableListOf<ClassStudent>()
         return userRepository.findById(id).map { user ->
-            user.userSubjects
-                ?.toList()
-                ?.filter { it.isProject == false }
-                ?.forEach { subject ->
-                    val semesterCurrent = subject.listClass?.toList()?.maxOfOrNull { it.semester!! }
-                    subject.listClass
-                        ?.filter { it.semester == semesterCurrent }
-                        ?.forEach {
-                            val subject = Subject(
-                                id = it.subjectClass?.id!!,
-                                name = it.subjectClass.name
-                            )
-                            classStudents.add(
-                                ClassStudent(
+            val semesterCurrent = 20212
+            user.likedClasses?.filter { it.semester == semesterCurrent && it.subjectClass?.type==TypeSubject.NORMAL }?.let {
+                it.forEach {
+                    val subject = Subject(
+                            id = it.subjectClass?.id!!,
+                            name = it.subjectClass.name
+                    )
+                    classStudents.add(
+                            ClassStudent(
                                     codeClass = it.codeClass,
                                     startTime = it.startTime,
                                     finishTime = it.finishTime,
@@ -203,11 +199,38 @@ class UserService(
                                     dateFinishCourse = it.dateFinishCourse,
                                     dateStartCourse = it.dateStartCourse,
                                     semester = it.semester
-                                )
                             )
-                        }
-
+                    )
                 }
+
+            }
+//            user.userSubjects
+//                ?.toList()
+//                ?.filter { it.isProject == false }
+//                ?.forEach { subject ->
+//                    val semesterCurrent = subject.listClass?.toList()?.maxOfOrNull { it.semester!! }
+//                    subject.listClass
+//                        ?.filter { it.semester == semesterCurrent }
+//                        ?.forEach {
+//                            val subject = Subject(
+//                                id = it.subjectClass?.id!!,
+//                                name = it.subjectClass.name
+//                            )
+//                            classStudents.add(
+//                                ClassStudent(
+//                                    codeClass = it.codeClass,
+//                                    startTime = it.startTime,
+//                                    finishTime = it.finishTime,
+//                                    dateStudy = it.dateStudy,
+//                                    subjectClass = subject,
+//                                    dateFinishCourse = it.dateFinishCourse,
+//                                    dateStartCourse = it.dateStartCourse,
+//                                    semester = it.semester
+//                                )
+//                            )
+//                        }
+//
+//                }
             ResponseEntity.ok(classStudents.toList())
         }.orElse(ResponseEntity.notFound().build())
     }

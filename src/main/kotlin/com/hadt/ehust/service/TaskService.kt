@@ -79,7 +79,7 @@ class TaskService(
         val listTask = mutableListOf<Task>()
         idTopics?.forEach { id ->
             taskRepository.findAllTaskWillExpire(id)?.let {
-                listTask.addAll(it.filter { it.showTimeRemain()!=null && it.showTimeRemain()!! <3 })
+                listTask.addAll(it.filter { it.showTimeRemain()!=null && it.showTimeRemain()!! <4 })
             }
         }
         return if (listTask.isNotEmpty()) ResponseEntity.ok().body(listTask) else ResponseEntity.notFound().build()
