@@ -6,6 +6,7 @@ import com.hadt.ehust.entities.User
 import com.hadt.ehust.model.Project
 import com.hadt.ehust.model.Role
 import com.hadt.ehust.model.TypeSubject
+import com.hadt.ehust.repository.ClassStudentRepository
 import com.hadt.ehust.repository.PairingRepository
 import com.hadt.ehust.repository.UserRepository
 import com.hadt.ehust.security.JwtUtils
@@ -20,6 +21,7 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(
     private val userRepository: UserRepository,
+    private val classRepository: ClassStudentRepository,
     private val pairingRepository: PairingRepository,
     private val authenticationManager: AuthenticationManager,
     private val jwtUtils: JwtUtils
@@ -182,7 +184,7 @@ class UserService(
     fun findByScheduleByIdStudent(id: Int): ResponseEntity<List<ClassStudent>> {
         val classStudents = mutableListOf<ClassStudent>()
         return userRepository.findById(id).map { user ->
-            val semesterCurrent = 20212
+            val semesterCurrent = classRepository.findAll().map { it.semester }.maxOf { it?:20212 }
             user.likedClasses?.filter { it.semester == semesterCurrent && it.subjectClass?.type==TypeSubject.NORMAL }?.let {
                 it.forEach {
                     val subject = Subject(

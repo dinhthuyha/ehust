@@ -60,7 +60,8 @@ fun Topic.copy(
     status: StatusTopic? = this.status,
     subject: Subject? = this.subject,
     nameStudent: String? = "",
-    progressStatus: ProgressStatus? = this.progressStatus
+    progressStatus: ProgressStatus? = this.progressStatus,
+    semester: Int? = this.semester
 
 ) = Topic(
     id = id,
@@ -70,5 +71,6 @@ fun Topic.copy(
     status = status,
     subject = subject,
     nameStudent = nameStudent,
-    progressStatus = progressStatus
+    progressStatus = progressStatus,
+        semester = semester
     )
