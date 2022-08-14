@@ -24,13 +24,13 @@ class MoreInformationTopic(
         @Column(name = "due_time")
         val dueTime: LocalDate? = null,
         @Transient
-        var nameTeacher: String,
+        var nameTeacher: String? = null,
         @Column(name = "id_teacher")
         val idTeacher: Int,
         @Column(name = "email_teacher")
         val emailTeacher: String,
         @Transient
-        var nameStudent: String,
+        var nameStudent: String? = null,
         @Column(name = "id_student")
         val idStudent: Int,
         @Column(name = "email_student")
@@ -41,9 +41,44 @@ class MoreInformationTopic(
         val endScore: Float? = null,
 
         @Enumerated(EnumType.ORDINAL)
+        @Column(name = "state_process")
         val stateProcess: ProgressStatus? = null,
 
         @Transient
-        var type: TypeSubject? = null
+        @Enumerated(EnumType.ORDINAL)
+        var type: TypeSubject? = null,
+
+        @Transient
+        var semester: Int? = null
+)
+
+fun MoreInformationTopic.copy(
+        id: Int = this.id,
+        title: String = this.title,
+        description: String? = this.description,
+        startTimeProgress: LocalDate? = this.startTimeProgress,
+        dueTime: LocalDate? = this.dueTime,
+        idTeacher: Int = this.idTeacher,
+        emailTeacher: String = this.emailTeacher,
+        idStudent: Int = this.idStudent,
+        emailStudent: String = this.emailStudent,
+        processScore: Float? = this.processScore,
+        endScore: Float? = this.endScore,
+        stateProcess: ProgressStatus? = this.stateProcess
+
+) = MoreInformationTopic(
+        id,
+        title,
+        description,
+        startTimeProgress,
+        dueTime,
+        nameTeacher,
+        idTeacher,
+        emailTeacher,
+        nameStudent,
+        idStudent,
+        emailStudent,
+        processScore,
+        endScore, stateProcess
 )
 
